@@ -2,11 +2,11 @@
 
 # CopyTiktok <small>1.0</small>
 
-> 一个神奇的文档网站生成器。
+> 一个仿抖音APP的软件项目
 
-- 简单、轻便 (压缩后 ~21kB)
-- 无需生成 html 文件
-- 众多主题
+- 项目前沿，亮点突出
+- 开发技术符合当今互联网趋势
+- 适合项目实战学习
 
 [GitHub](https://github.com/He-Xiang-best/CopyTiktok)
 [Get Started](/README.md)
