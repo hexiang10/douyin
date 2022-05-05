@@ -1,2 +1,2 @@
-# CopyTiktok
-Imitation Tiktok app —— 仿抖音APP开发程序
+# douyin-app
+douyin-app —— 仿抖音APP的开发程序
