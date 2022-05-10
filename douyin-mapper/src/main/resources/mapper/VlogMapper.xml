@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.douyin.dao.mapper.VlogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.douyin.model.domain.Vlog">
+        <id column="id" property="id" />
+        <result column="vloger_id" property="vlogerId" />
+        <result column="url" property="url" />
+        <result column="cover" property="cover" />
+        <result column="title" property="title" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="like_counts" property="likeCounts" />
+        <result column="comments_counts" property="commentsCounts" />
+        <result column="is_private" property="isPrivate" />
+        <result column="created_time" property="createdTime" />
+        <result column="updated_time" property="updatedTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, vloger_id, url, cover, title, width, height, like_counts, comments_counts, is_private, created_time, updated_time
+    </sql>
+
+</mapper>

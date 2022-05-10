@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.douyin.dao.mapper.CommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.douyin.model.domain.Comment">
+        <id column="id" property="id" />
+        <result column="vloger_id" property="vlogerId" />
+        <result column="father_comment_id" property="fatherCommentId" />
+        <result column="vlog_id" property="vlogId" />
+        <result column="comment_user_id" property="commentUserId" />
+        <result column="content" property="content" />
+        <result column="like_counts" property="likeCounts" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, vloger_id, father_comment_id, vlog_id, comment_user_id, content, like_counts, create_time
+    </sql>
+
+</mapper>

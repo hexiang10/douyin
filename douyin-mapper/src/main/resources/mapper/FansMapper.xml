@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.douyin.dao.mapper.FansMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.douyin.model.domain.Fans">
+        <id column="id" property="id" />
+        <result column="vloger_id" property="vlogerId" />
+        <result column="fan_id" property="fanId" />
+        <result column="is_fan_friend_of_mine" property="isFanFriendOfMine" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, vloger_id, fan_id, is_fan_friend_of_mine
+    </sql>
+
+</mapper>

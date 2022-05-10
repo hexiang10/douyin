@@ -1,0 +1,35 @@
+server:
+  port: 8099
+  tomcat:
+    uri-encoding: UTF-8
+    max-swallow-size: -1  # tomcat默认大小2M，超过2M的文件不会被捕获，需要调整此处大小为100MB或者-1即可
+
+spring:
+  profiles:
+    active:
+      - dev
+  servlet:
+    multipart:
+      max-file-size: 2MB      # 文件上传大小限制，设置最大值，不能超过该值，否则报错
+      max-request-size: 2MB     # 文件最大请求限制，用于批量上传，设置最大值，不能超过该值，否则报错
+
+# Mybatis-plus配置
+mybatis-plus:
+  global-config:
+    banner: false
+  #配置Mapper映射文件
+  mapper-locations: classpath*:/mapper/*Mapper.xml
+  # 配置MyBatis数据返回类型别名（默认别名是类名）
+  type-aliases-package: com.douyin.model.domain
+  configuration:
+    # 自动驼峰命名
+    map-underscore-to-camel-case: true
+
+## Mybatis SQL 打印(方法接口所在的包，不是Mapper.xml所在的包)
+logging:
+  level:
+    com.douyin.mapper: debug
+
+pagehelper:
+  helper-dialect: mysql
+  support-method-prefix: true
