@@ -15,6 +15,7 @@
     <artifactId>douyin-common</artifactId>
 
     <dependencies>
+
         <!-- 引入SpringBoot 依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -32,7 +33,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-
 
         <!-- 引入Mysql 依赖-->
         <dependency>
@@ -108,6 +108,10 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
         </dependency>
 
         <!-- knife4j 接口文档工具 -->

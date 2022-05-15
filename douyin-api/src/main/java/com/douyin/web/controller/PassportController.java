@@ -71,9 +71,18 @@ public class PassportController extends BaseInfoProperties {
 
 
     @PostMapping("/login")
-    @ApiOperation(value = "登录注册", notes = "登录注册")
+    @ApiOperation(value = "注册登录", notes = "注册登录")
     public GraceJSONResult login(@Valid @RequestBody RegistLoginBo registLoginBo) {
 
+        // TODO 用户名密码登录业务待拓展
+
+        /*
+        * @Author: 何翔
+        * @Description: 短信登录/注册
+        * @DateTime: 2022/5/15 21:34
+        * @Params: [registLoginBo]
+        * @Return com.douyin.common.result.GraceJSONResult
+        */
         //获取注册信息
         String mobile = registLoginBo.getMobile();
         String code = registLoginBo.getSmsCode();
@@ -104,4 +113,18 @@ public class PassportController extends BaseInfoProperties {
         usersVo.setUserToken(uToken);
         return GraceJSONResult.ok(usersVo);
     }
+
+    @PostMapping("/logout")
+    @ApiOperation(value = "退出登录", notes = "退出登录")
+    public GraceJSONResult logout(@RequestParam String userId) {
+        //删除redis中的用户会话信息
+        redisUtil.del(REDIS_USER_TOKEN+":"+userId);
+        return GraceJSONResult.ok();
+
+    }
+
+
+
+
+
 }

@@ -36,3 +36,13 @@ spring:
     database: 3
     # Redis服务器密码
     password: root
+
+# MinIO 配置
+minio:
+  endpoint: http://192.168.238.145:9000      # MinIO服务地址
+  fileHost: http://192.168.238.145:9000      # 文件地址host
+  bucketName: douyin                         # 存储桶bucket名称
+  accessKey: minioadmin                      # 用户名
+  secretKey: minioadmin                      # 密码
+  imgSize: 1024                              # 图片大小限制，单位：m
+  fileSize: 1024                             # 文件大小限制，单位：m

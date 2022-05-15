@@ -53,6 +53,13 @@ public class GraceExceptionHandler {
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     @ResponseBody
     public GraceJSONResult returnMaxUploadSize(MaxUploadSizeExceededException e) {
+        /*
+        * @Author: 何翔
+        * @Description: 文件上传异常处理
+        * @DateTime: 2022/5/15 21:09
+        * @Params: [e]
+        * @Return com.douyin.common.result.GraceJSONResult
+        */
         //e.printStackTrace();
         return GraceJSONResult.errorCustom(ResponseStatusEnum.FILE_MAX_SIZE_2MB_ERROR);
     }

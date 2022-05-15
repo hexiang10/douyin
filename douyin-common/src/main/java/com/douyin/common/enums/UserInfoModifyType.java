@@ -9,7 +9,7 @@ import com.douyin.common.result.ResponseStatusEnum;
  */
 public enum UserInfoModifyType {
     NICKNAME(1, "昵称"),
-    IMOOCNUM(2, "抖音号"),
+    DOUYINNUM(2, "抖音号"),
     SEX(3, "性别"),
     BIRTHDAY(4, "生日"),
     LOCATION(5, "所在地"),
@@ -25,7 +25,7 @@ public enum UserInfoModifyType {
 
     public static void checkUserInfoTypeIsRight(Integer type) {
         if (type != UserInfoModifyType.NICKNAME.type &&
-                type != UserInfoModifyType.IMOOCNUM.type &&
+                type != UserInfoModifyType.DOUYINNUM.type &&
                 type != UserInfoModifyType.SEX.type &&
                 type != UserInfoModifyType.BIRTHDAY.type &&
                 type != UserInfoModifyType.LOCATION.type &&
