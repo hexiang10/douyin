@@ -1,0 +1,1 @@
+cp ../githooks/commit-msg ../.git/hooks/

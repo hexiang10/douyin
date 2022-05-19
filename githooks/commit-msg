@@ -9,5 +9,10 @@
 # may need to make the script executable by 'chmod +x .git/hooks/commit-msg'.
 
 # commit-msg use go-gitlint tool, install go-gitlint via `go get github.com/llorllale/go-gitlint/cmd/go-gitlint`
-
-go-gitlint --msg-file="$1"
+if [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]
+then
+    ./tool/gitlint --path="./.git" --msg-file="$1"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]
+then
+    ./tool/gitlint.exe --path="./.git" --msg-file="$1"
+fi
