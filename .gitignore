@@ -46,4 +46,5 @@ nbdist/
 !*/build/*.xml
 
 douyin-ui/*
+imooc-red-book/*
 
