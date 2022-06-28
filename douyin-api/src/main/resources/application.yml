@@ -25,11 +25,12 @@ mybatis-plus:
     # 自动驼峰命名
     map-underscore-to-camel-case: true
 
-## Mybatis SQL 打印(方法接口所在的包，不是Mapper.xml所在的包)
+# Mybatis SQL 打印(方法接口所在的包，不是Mapper.xml所在的包)
 logging:
   level:
     com.douyin.mapper: debug
 
+# 分页插件助手配置
 pagehelper:
   helper-dialect: mysql
   support-method-prefix: true

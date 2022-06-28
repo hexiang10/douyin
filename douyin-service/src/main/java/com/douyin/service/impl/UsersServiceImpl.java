@@ -29,16 +29,21 @@ import java.util.Date;
 public class UsersServiceImpl extends ServiceImpl<UsersMapper, Users> implements IUsersService {
 
     @Autowired
-    private UsersMapper usersMapper;
-
-    @Autowired
     private Sid sid;
 
-    private static final String USER_FACE1 = "http://192.168.238.130:8888/group1/M00/00/00/wKjugmJhCT2AMCMPAAOW3cLBiRY024.jpg";
+    //默认头像
+    private static final String USER_FACE1 = "https://profile-avatar.csdnimg.cn/3ef0c844043d41f9a5c3f7ec91039153_hxbest.jpg!1";
 
     @Override
     @Transactional
     public Users createUser(String mobile) {
+        /*
+        * @Author: 何翔
+        * @Description: 创建用户信息，并且返回用户对象
+        * @DateTime: 2022/6/16 0:02
+        * @Params: [mobile]
+        * @Return com.douyin.model.domain.Users
+        */
         Users user = new Users();
         String userId = sid.nextShort();
         user.setId(userId);

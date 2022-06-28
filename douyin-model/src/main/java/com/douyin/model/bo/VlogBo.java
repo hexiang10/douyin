@@ -1,14 +1,15 @@
-package com.douyin.model.domain;
+package com.douyin.model.bo;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.time.LocalDateTime;
-import java.io.Serializable;
-import java.util.Date;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -19,10 +20,12 @@ import lombok.EqualsAndHashCode;
  * @since 2022-05-08
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_vlog")
 @ApiModel(value="Vlog对象", description="短视频表")
-public class Vlog implements Serializable {
+public class VlogBo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,15 +54,5 @@ public class Vlog implements Serializable {
 
     @ApiModelProperty(value = "评论总数")
     private Integer commentsCounts;
-
-    @ApiModelProperty(value = "是否私密，用户可以设置私密，如此可以不公开给比人看")
-    private Integer isPrivate;
-
-    @ApiModelProperty(value = "创建时间 创建时间")
-    private Date createdTime;
-
-    @ApiModelProperty(value = "更新时间 更新时间")
-    private Date updatedTime;
-
 
 }

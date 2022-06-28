@@ -2,7 +2,7 @@ package com.douyin.common.exceptions;
 
 
 import com.douyin.common.result.GraceJSONResult;
-import com.douyin.common.result.ResponseStatusEnum;
+import com.douyin.common.enums.ResponseStatusEnum;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

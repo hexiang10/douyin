@@ -9,7 +9,7 @@ import com.douyin.common.enums.YesOrNo;
 import com.douyin.common.exceptions.GraceException;
 import com.douyin.common.properties.BaseInfoProperties;
 import com.douyin.common.result.GraceJSONResult;
-import com.douyin.common.result.ResponseStatusEnum;
+import com.douyin.common.enums.ResponseStatusEnum;
 import com.douyin.common.utils.MinIOUtil;
 import com.douyin.model.bo.UpdatedUserBo;
 import com.douyin.model.domain.Users;

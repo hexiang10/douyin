@@ -1,7 +1,7 @@
 package com.douyin.common.exceptions;
 
 
-import com.douyin.common.result.ResponseStatusEnum;
+import com.douyin.common.enums.ResponseStatusEnum;
 
 /**
  * 优雅的处理异常，统一封装

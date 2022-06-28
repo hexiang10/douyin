@@ -70,7 +70,7 @@ public class SMSUtil {
     }
 
 
-
+    // Test 测试代码做校验
     //public static void main(String[] args) {
     //    try {
     //        new SMSUtils().sendSMS("15875615752", "985211");

@@ -3,6 +3,7 @@ package com.douyin.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.douyin.model.domain.Vlog;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -12,6 +13,5 @@ import com.douyin.model.domain.Vlog;
  * @author 何翔
  * @since 2022-05-08
  */
-public interface VlogMapper extends BaseMapper<Vlog> {
-
-}
+@Repository
+public interface VlogMapper extends BaseMapper<Vlog> { }

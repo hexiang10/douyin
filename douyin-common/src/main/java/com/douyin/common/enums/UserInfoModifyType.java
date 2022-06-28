@@ -2,7 +2,6 @@ package com.douyin.common.enums;
 
 
 import com.douyin.common.exceptions.GraceException;
-import com.douyin.common.result.ResponseStatusEnum;
 
 /**
  * @Desc: 修改用户信息类型 枚举

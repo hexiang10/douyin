@@ -2,11 +2,10 @@ package com.douyin.common.intercepter;
 
 import com.douyin.common.exceptions.GraceException;
 import com.douyin.common.properties.BaseInfoProperties;
-import com.douyin.common.result.ResponseStatusEnum;
+import com.douyin.common.enums.ResponseStatusEnum;
 import com.douyin.common.utils.IPUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

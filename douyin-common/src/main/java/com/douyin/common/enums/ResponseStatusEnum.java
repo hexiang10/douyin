@@ -1,4 +1,4 @@
-package com.douyin.common.result;
+package com.douyin.common.enums;
 
 /**
  * 响应结果枚举，用于提供给GraceJSONResult返回给前端的

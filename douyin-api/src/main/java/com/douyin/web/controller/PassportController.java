@@ -3,7 +3,7 @@ package com.douyin.web.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.douyin.common.properties.BaseInfoProperties;
 import com.douyin.common.result.GraceJSONResult;
-import com.douyin.common.result.ResponseStatusEnum;
+import com.douyin.common.enums.ResponseStatusEnum;
 import com.douyin.common.utils.IPUtil;
 import com.douyin.common.utils.SMSUtil;
 import com.douyin.model.bo.RegistLoginBo;
@@ -46,6 +46,13 @@ public class PassportController extends BaseInfoProperties {
     @PostMapping("/getSMSCode")
     @ApiOperation(value = "发送短信", notes = "发送短信")
     public GraceJSONResult sendSms(@RequestParam String mobile , HttpServletRequest request) {
+        /*
+        * @Author: 何翔
+        * @Description: 发送短信验证码
+        * @DateTime: 2022/6/14 21:43
+        * @Params: [mobile, request]
+        * @Return com.douyin.common.result.GraceJSONResult
+        */
         try {
             //判断手机号码是否为空
             if(StringUtils.isBlank(mobile)){
@@ -57,11 +64,14 @@ public class PassportController extends BaseInfoProperties {
             redisUtil.setnx(MOBILE_SMSCODE+":"+ip,ip);
             //生成随机的验证码
             String code = (int)(Math.random()*9+1)*100000+"";
-            //发送短信
-            smsUtil.sendSMS(mobile, code);
+
+            //prod:发送短信 smsUtil.sendSMS(mobile, code);
+
             log.info(code);
             //将验证码存入redis
-            redisUtil.set(MOBILE_SMSCODE+":"+mobile,code,30*60);
+            //dev
+            redisUtil.set(MOBILE_SMSCODE+":"+mobile,"666",30*60);
+            //prod redisUtil.set(MOBILE_SMSCODE+":"+mobile,code,30*60);
             return GraceJSONResult.ok();
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,9 +83,6 @@ public class PassportController extends BaseInfoProperties {
     @PostMapping("/login")
     @ApiOperation(value = "注册登录", notes = "注册登录")
     public GraceJSONResult login(@Valid @RequestBody RegistLoginBo registLoginBo) {
-
-        // TODO 用户名密码登录业务待拓展
-
         /*
         * @Author: 何翔
         * @Description: 短信登录/注册
@@ -83,6 +90,9 @@ public class PassportController extends BaseInfoProperties {
         * @Params: [registLoginBo]
         * @Return com.douyin.common.result.GraceJSONResult
         */
+
+        // TODO 用户名密码登录业务待拓展
+
         //获取注册信息
         String mobile = registLoginBo.getMobile();
         String code = registLoginBo.getSmsCode();
@@ -104,6 +114,7 @@ public class PassportController extends BaseInfoProperties {
         }
         //如果用户存在，则执行以下业务，可以保存用户会话信息
         String uToken = UUID.randomUUID().toString();
+        log.info(uToken);
         redisUtil.set(REDIS_USER_TOKEN+":"+user.getId(),uToken,60*60*24);
         //校验成功后，将验证码删除
         redisUtil.del(MOBILE_SMSCODE+":"+mobile);
@@ -116,9 +127,10 @@ public class PassportController extends BaseInfoProperties {
 
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
-    public GraceJSONResult logout(@RequestParam String userId) {
+    public GraceJSONResult logout(@RequestParam String userId , HttpServletRequest request) {
         //删除redis中的用户会话信息
         redisUtil.del(REDIS_USER_TOKEN+":"+userId);
+        redisUtil.del(MOBILE_SMSCODE+":"+IPUtil.getRequestIp(request));
         return GraceJSONResult.ok();
 
     }
