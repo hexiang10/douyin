@@ -27,7 +27,7 @@ public class Fans implements Serializable {
 
     private String id;
 
-    @ApiModelProperty(value = "作家用户id")
+    @ApiModelProperty(value = "作者用户id")
     private String vlogerId;
 
     @ApiModelProperty(value = "粉丝用户id")

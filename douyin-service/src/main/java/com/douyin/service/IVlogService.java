@@ -2,6 +2,7 @@ package com.douyin.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.douyin.common.result.PagedGridResult;
 import com.douyin.model.bo.VlogBo;
 import com.douyin.model.domain.Vlog;
 import com.douyin.model.vo.IndexVlogVO;
@@ -34,5 +35,19 @@ public interface IVlogService extends IService<Vlog> {
       根据视频主键查询视频详情信息
      */
     IndexVlogVO getVlogDetailById(String vlogId);
+
+    /*
+      修改视频为公开/私密
+     */
+    void changeToPrivateOrPublic(String vlogId,
+                                 String userId,
+                                 Integer yesOrNo);
+    /*
+      查询用户公开/私密作品列表
+     */
+    List<Vlog> queryMyVlogList(String userId,
+                                    Integer page,
+                                    Integer pageSize,
+                                    Integer yesOrNo);
 
 }

@@ -1,9 +1,11 @@
 package com.douyin.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.douyin.common.enums.YesOrNo;
 import com.douyin.common.idworker.Sid;
+import com.douyin.common.result.PagedGridResult;
 import com.douyin.dao.mapper.CustomVlogMapper;
 import com.douyin.dao.mapper.VlogMapper;
 import com.douyin.model.bo.VlogBo;
@@ -98,5 +100,36 @@ public class VlogServiceImpl extends ServiceImpl<VlogMapper, Vlog> implements IV
             return vlogDetailList.get(0);
         }
         return null;
+    }
+
+    @Override
+    public void changeToPrivateOrPublic(String vlogId, String userId, Integer yesOrNo) {
+        /*
+        * @Author: 何翔
+        * @Description: 修改视频为公开/私密
+        * @DateTime: 2022/6/29 21:06
+        * @Params: [vlogId, userId, yesOrNo]
+        * @Return com.douyin.model.vo.IndexVlogVO
+        */
+        QueryWrapper<Vlog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("vlogerId",userId).eq("id",userId);
+        Vlog pendingVlog = new Vlog();
+        pendingVlog.setIsPrivate(yesOrNo);
+        vlogMapper.update(pendingVlog,queryWrapper);
+    }
+
+    @Override
+    public List<Vlog> queryMyVlogList(String userId, Integer page, Integer pageSize, Integer yesOrNo) {
+        /*
+        * @Author: 何翔
+        * @Description: 查询用户公开/私密作品列表
+        * @DateTime: 2022/7/1 22:48
+        * @Params: [userId, page, pageSize, yesOrNo]
+        * @Return com.douyin.common.result.PagedGridResult
+        */
+        QueryWrapper<Vlog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("vlogerId",userId).eq("isPrivate",yesOrNo);
+        PageHelper.startPage(page,pageSize);
+        return vlogMapper.selectList(queryWrapper);
     }
 }

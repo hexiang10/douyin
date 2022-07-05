@@ -37,10 +37,10 @@ spring:
     # Redis服务器密码
     password: root
 
-# MinIO 配置
+# MinIO 配置 url:http://192.168.238.130:9111/
 minio:
-  endpoint: http://192.168.238.148:9000      # MinIO服务地址
-  fileHost: http://192.168.238.148:9000      # 文件地址host
+  endpoint: http://192.168.238.149:9000      # MinIO服务地址  dev-step1: ps -ef|grep minio \n kill -9 xxxxx
+  fileHost: http://192.168.238.149:9000      # 文件地址host   dev-step2: cd /usr/local/minio/ \n ./start-minio.sh
   bucketName: douyin                         # 存储桶bucket名称
   accessKey: minioadmin                      # 用户名
   secretKey: minioadmin                      # 密码
