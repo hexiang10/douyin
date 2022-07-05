@@ -3,6 +3,7 @@ package com.douyin.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.douyin.model.domain.Fans;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -14,6 +15,7 @@ import com.douyin.model.domain.Fans;
  * @author 何翔
  * @since 2022-05-08
  */
+@Repository
 public interface FansMapper extends BaseMapper<Fans> {
 
 }

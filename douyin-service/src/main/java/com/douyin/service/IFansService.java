@@ -16,4 +16,8 @@ import com.douyin.model.domain.Fans;
  */
 public interface IFansService extends IService<Fans> {
 
+    /*
+      关注
+     */
+    void doFollow(String myId,String VlogerId);
 }
