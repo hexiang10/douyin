@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.douyin</groupId>
-    <artifactId>douyin-app</artifactId>
+    <artifactId>douyin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>douyin-common</module>
@@ -54,6 +54,7 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatisplus.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
