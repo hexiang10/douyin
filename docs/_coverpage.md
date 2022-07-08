@@ -2,7 +2,7 @@
 
 ![logo](/_media/logo.svg)
 
-# douyin-app <small>1.0</small>
+# douyin <small>1.0</small>
 
 > 一个仿抖音APP的开源项目
 
@@ -10,5 +10,6 @@
 - 开发技术符合当今互联网趋势
 - 适合项目实战学习
 
-[GitHub](https://github.com/He-Xiang-best/douyin-app)
+[GitHub](https://github.com/He-Xiang-best/douyin)
 [Get Started](/README.md)
+

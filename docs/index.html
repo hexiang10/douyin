@@ -3,11 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>douyin-app</title>
+  <title>仿抖音APP</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <link rel="stylesheet" href="css/vue.css">
   <link rel="icon" href="_media/favicon.ico" />
   <style>
     table {
@@ -21,8 +21,8 @@
   <div id="app">加载中...</div>
   <script>
     window.$docsify = {
-      name: '仿抖音app开发文档',
-      repo: 'https://github.com/He-Xiang-best/douyin-app',
+      name: '仿抖音APP开发文档',
+      repo: 'https://github.com/he-xiang-best/douyin?_blank',
       loadSidebar: true,
       coverpage: true,
       loadNavbar: true,
@@ -32,66 +32,42 @@
       subMaxLevel: 4,
       // 小屏设备下合并导航栏到侧边栏
       mergeNavbar: true,
-	  // 切换页面后是否自动跳转到页面顶部。
-	  auto2top: true,
-	  
-	  externalLinkTarget: '_blank', // default: '_blank'
-    }
-  </script>
+      // 切换页面后是否自动跳转到页面顶部。
+      auto2top: true,
 
-  <script>
-    // 搜索配置(url：https://docsify.js.org/#/zh-cn/plugins?id=%e5%85%a8%e6%96%87%e6%90%9c%e7%b4%a2-search)
-    window.$docsify = {
-      // 完整配置参数
+      externalLinkTarget: '_blank', // default: '_blank'
+
       search: {
-        maxAge: 86400000, // 过期时间，单位毫秒，默认一天
-        paths: auto, // or 'auto'
-        placeholder: '搜索', // 搜索框占位符
-
-        // 支持本地化
+        noData: {
+          '/zh-cn/': '没有结果!',
+          '/': '没有结果!',
+        },
+        paths: 'auto',
         placeholder: {
+          '/zh-cn/': '搜索',
           '/': '搜索',
         },
-        // 支持本地化
-        noData: {
-          '/': '找不到结果',
-        },
+        pathNamespaces: ['/zh-cn'],
+      },
 
-        // 搜索标题的最大层级, 1 - 6
-        depth: 6,
 
-        hideOtherSidebarContent: false, // 是否隐藏其他侧边栏内容
 
-        // 避免搜索索引冲突
-        // 同一域下的多个网站之间
-        namespace: 'douyin-app',
-
-        // 使用不同的索引作为路径前缀（namespaces）
-        // 注意：仅适用于 paths: 'auto' 模式
-        //
-        // 初始化索引时，我们从侧边栏查找第一个路径
-        // 如果它与列表中的前缀匹配，我们将切换到相应的索引
-        pathNamespaces: ['/zh-cn', '/ru-ru', '/ru-ru/v1'],
-
-        // 您可以提供一个正则表达式来匹配前缀。在这种情况下，
-        // 匹配到的字符串将被用来识别索引
-        pathNamespaces: /^(\/(zh-cn|ru-ru))?(\/(v1|v2))?/
-      }
     }
   </script>
 
   <!-- Docsify v4 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="js/docsify@4.js"></script>
+  <!-- <script src="//cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script> -->
   <!-- emoji表情支持 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="js/emoji.min.js"></script>
   <!-- 图片放大缩小支持 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="js/zoom-image.min.js"></script>
   <!-- 搜索功能支持 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  <script src="js/search.min.js"></script>
   <!--在所有的代码块上添加一个简单的Click to copy按钮来允许用户从你的文档中轻易地复制代码-->
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="js/docsify-copy-code.min.js"></script>
   <!-- 代码高亮 -->
-  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="js/prism-java.min.js"></script>
 </body>
 
 </html>
