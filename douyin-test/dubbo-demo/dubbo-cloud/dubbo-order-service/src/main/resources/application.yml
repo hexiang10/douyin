@@ -1,0 +1,39 @@
+server:
+  port: 8081
+
+mybatis-plus:
+  mapper-packages: com.dubbo.demo.mapper
+  global-config:
+    banner: false
+
+logging:
+  level:
+    com.dubbo.demo: debug
+  pattern:
+    dateformat: HH:mm:ss:SSS
+
+spring:
+  application:
+    name: dubbo-order-service
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://1.12.42.148:3306/douyin_cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 1.12.42.148:8848
+
+dubbo:
+  protocol:
+    name: dubbo
+    port: -1
+  scan:
+    base-packages: com.dubbo.demo.service
+  registry:
+    address: spring-cloud://1.12.42.148
+  consumer:
+    check: false
+  cloud:
+    subscribed-services: dubbo-order-service,dubbo-user-service
