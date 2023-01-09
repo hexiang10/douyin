@@ -13,16 +13,27 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.douyin</groupId>
+            <artifactId>douyin-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
         <!-- minio 分布式存储 -->
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.douyin</groupId>
-            <artifactId>douyin-service-api</artifactId>
-        </dependency>
+
 
     </dependencies>
 

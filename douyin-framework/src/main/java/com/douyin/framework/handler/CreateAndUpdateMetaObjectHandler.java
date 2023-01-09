@@ -21,10 +21,10 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
         try {
             if (ObjectUtil.isNotNull(metaObject) && metaObject.getOriginalObject() instanceof BaseEntity) {
                 BaseEntity baseEntity = (BaseEntity) metaObject.getOriginalObject();
-                Date current = ObjectUtil.isNotNull(baseEntity.getCreateTime())
-                    ? baseEntity.getCreateTime() : new Date();
-                baseEntity.setCreateTime(current);
-                baseEntity.setUpdateTime(current);
+                Date current = ObjectUtil.isNotNull(baseEntity.getCreatedTime())
+                    ? baseEntity.getCreatedTime() : new Date();
+                baseEntity.setCreatedTime(current);
+                baseEntity.setUpdatedTime(current);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -38,7 +38,7 @@ public class CreateAndUpdateMetaObjectHandler implements MetaObjectHandler {
                 BaseEntity baseEntity = (BaseEntity) metaObject.getOriginalObject();
                 Date current = new Date();
                 // 更新时间填充(不管为不为空)
-                baseEntity.setUpdateTime(current);
+                baseEntity.setUpdatedTime(current);
 
             }
         } catch (Exception e) {

@@ -21,7 +21,6 @@
         <dependency>
             <groupId>com.douyin</groupId>
             <artifactId>douyin-framework</artifactId>
-            <scope>provided</scope>
         </dependency>
 
         <!-- nacos注册/配置中心 -->
