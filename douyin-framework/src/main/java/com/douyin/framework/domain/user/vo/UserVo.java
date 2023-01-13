@@ -1,10 +1,7 @@
 package com.douyin.framework.domain.user.vo;
 
-import com.douyin.framework.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
 
@@ -17,9 +14,7 @@ import java.util.Date;
  * @since 2023-01-07
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
-public class UserVo extends BaseEntity {
+public class UserVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -72,7 +67,6 @@ public class UserVo extends BaseEntity {
      * 区县
      */
     private String district;
-
     /**
      * 简介
      */
@@ -85,6 +79,18 @@ public class UserVo extends BaseEntity {
      * 抖音号能否被修改：1：默认，可以修改；0，无法修改
      */
     private Integer canImoocNumBeUpdated;
+    /**
+     * 用户关注博主的总数量
+     */
+    private Integer myFollowsCounts;
+    /**
+     * 用户的粉丝总数
+     */
+    private Integer myFansCounts;
+    /**
+     * 所有喜欢用户的总数
+     */
+    private Integer totalLikeMeCounts;
 
 
 }

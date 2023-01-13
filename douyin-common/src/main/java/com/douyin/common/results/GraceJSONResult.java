@@ -35,17 +35,19 @@ public class GraceJSONResult {
         return new GraceJSONResult(data);
     }
     /**
+     * 成功返回，带有自定义消息数据但不带数据
+     * @param message
+     * @return
+     */
+    public static GraceJSONResult ok(String message) {
+        return new GraceJSONResult(message);
+    }
+    /**
      * 成功返回，不带有数据的，直接调用ok方法，data无须传入（其实就是null）
      * @return
      */
     public static GraceJSONResult ok() {
         return new GraceJSONResult(ResponseStatusEnum.SUCCESS);
-    }
-    public GraceJSONResult(Object data) {
-        this.status = ResponseStatusEnum.SUCCESS.status();
-        this.msg = ResponseStatusEnum.SUCCESS.msg();
-        this.success = ResponseStatusEnum.SUCCESS.success();
-        this.data = data;
     }
 
     /**
@@ -82,6 +84,7 @@ public class GraceJSONResult {
         return new GraceJSONResult(ResponseStatusEnum.TICKET_INVALID);
     }
 
+
     /**
      * 自定义错误范围，需要传入一个自定义的枚举，可以到[ResponseStatusEnum.java[中自定义后再传入
      * @param responseStatus
@@ -109,6 +112,17 @@ public class GraceJSONResult {
         this.status = responseStatus.status();
         this.msg = msg;
         this.success = responseStatus.success();
+    }
+    public GraceJSONResult(Object data) {
+        this.status = ResponseStatusEnum.SUCCESS.status();
+        this.msg = ResponseStatusEnum.SUCCESS.msg();
+        this.success = ResponseStatusEnum.SUCCESS.success();
+        this.data = data;
+    }
+    public GraceJSONResult(String message) {
+        this.status = ResponseStatusEnum.SUCCESS.status();
+        this.msg = message;
+        this.success = ResponseStatusEnum.SUCCESS.success();
     }
 
     public GraceJSONResult() {

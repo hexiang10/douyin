@@ -1,9 +1,9 @@
 server:
-  port: 8080
+  port: 8889
 spring:
   # 服务名称
   application:
-    name: douyin-middleware
+    name: douyin-middleware-server
   cloud:
     nacos:
       config:
@@ -12,17 +12,20 @@ spring:
         server-addr: 1.12.42.148:8848
         file-extension: yaml
         shared-configs:
-          - dataId: douyin-common.yaml
+          - dataId: common.yaml
             group: dev
             refresh: true
         extension-configs:
-          - dataId: douyin-minio.yaml
+          - dataId: minio.yaml
             group: dev
             refresh:  true
-          - dataId: douyin-dubbo.yaml
+          - dataId: dubbo.yaml
+            group: dev
+            refresh: true
+          - dataId: datasource.yaml
             group: dev
             refresh: true
 # 消费服务
 dubbo:
   cloud:
-    subscribed-services: user-service
+    subscribed-services: douyin-middleware-server

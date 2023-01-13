@@ -15,11 +15,6 @@
 
         <dependency>
             <groupId>com.douyin</groupId>
-            <artifactId>douyin-common</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.douyin</groupId>
             <artifactId>douyin-framework</artifactId>
         </dependency>
 
@@ -34,6 +29,7 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
+        <!-- dubbo -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>

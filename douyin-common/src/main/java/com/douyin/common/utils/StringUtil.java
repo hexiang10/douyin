@@ -33,4 +33,13 @@ public class StringUtil {
          return  prefix + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + UUID.randomUUID().toString().substring(0, length);
 
      }
+
+    /**
+     * 生成当前时间搓字符
+     */
+    public static String getCurrentTimeStr(){
+
+        return  new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
+    }
 }

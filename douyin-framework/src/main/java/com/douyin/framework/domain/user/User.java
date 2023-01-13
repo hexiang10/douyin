@@ -66,7 +66,7 @@ public class User extends BaseEntity {
      * 生日
      */
     @TableField("birthday")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 
     /**

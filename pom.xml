@@ -15,7 +15,6 @@
         <module>douyin-test</module>
         <module>douyin-service-api</module>
         <module>douyin-framework</module>
-        <module>douyin-middleware</module>
     </modules>
 
     <properties>

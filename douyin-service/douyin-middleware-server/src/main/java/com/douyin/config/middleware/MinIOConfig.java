@@ -1,7 +1,7 @@
-package com.douyin.middleware.config;
+package com.douyin.config.middleware;
 
 
-import com.douyin.middleware.utils.MinIOUtil;
+import com.douyin.utils.middleware.MinIOUtil;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

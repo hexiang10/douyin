@@ -1,4 +1,4 @@
-package com.douyin.middleware.utils;
+package com.douyin.utils.middleware;
 
 import io.minio.*;
 import io.minio.http.Method;

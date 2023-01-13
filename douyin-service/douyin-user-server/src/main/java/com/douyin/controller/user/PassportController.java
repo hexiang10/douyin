@@ -30,12 +30,13 @@ import java.util.UUID;
  */
 @RestController
 @Slf4j
-@RequestMapping("/user")
-@Tag(name = "UserController",description = "用户接口模块")
-public class UserController extends BaseProperties {
+@RequestMapping("/passport")
+@Tag(name = "PassportController",description = "用户登录、登出、认证鉴权模块")
+public class PassportController extends BaseProperties<User> {
 
     @Autowired
     UserService userService;
+
 
     /**
      * 发送短信
@@ -61,7 +62,7 @@ public class UserController extends BaseProperties {
             log.info(smsCode);
             // 将验证码存入redis
             redis.set(MOBILE_SMSCODE+":"+mobile,smsCode,60);
-            return GraceJSONResult.ok();
+            return GraceJSONResult.ok("发送成功");
         }catch(Exception e){
             log.error(e.getMessage());
         }
@@ -90,9 +91,10 @@ public class UserController extends BaseProperties {
         if(user==null){
             user= userService.createUser(mobile);
         }
-        // 如果用户不为空，则保存用户会话信息(也可以存用户信息，看个人需求)
+        // 如果用户不为空，则保存用户会话信息和用户信息
         String uToken = UUID.randomUUID().toString();
         redis.set(REDIS_USER_TOKEN + ":"+ user.getId(),uToken,24*60*60*7);
+        redisCache.setObject(REDIS_USER_INFO+":"+user.getId(),user);
         // 用户登录注册成功以后，删除redis中的短信验证码
         redis.del(MOBILE_SMSCODE+":"+mobile);
         // 返回用户信息，包含token令牌
@@ -109,10 +111,10 @@ public class UserController extends BaseProperties {
      */
     @PostMapping("/logout")
     public GraceJSONResult logout(@RequestParam String userId){
-        // 后端清除用户会话的token信息，前端清除本地app中的用户信息和token
+        // 后端清除用户会话的token信息、用户信息；前端清除本地app中的用户信息和token
         redis.del(REDIS_USER_TOKEN + ":"+userId);
+        redisCache.removeObj(REDIS_USER_INFO+":"+userId);
         return GraceJSONResult.ok();
     }
-
 
 }

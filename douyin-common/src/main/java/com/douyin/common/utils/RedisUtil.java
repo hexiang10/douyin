@@ -285,4 +285,5 @@ public class RedisUtil {
 		return redisTemplate.opsForList().rightPush(key, value);
 	}
 
+
 }

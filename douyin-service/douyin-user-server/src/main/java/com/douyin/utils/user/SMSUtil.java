@@ -1,7 +1,7 @@
-package com.douyin.utils;
+package com.douyin.utils.user;
 
 
-import com.douyin.properties.TencentCloudProperties;
+import com.douyin.properties.user.TencentCloudProperties;
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.common.profile.ClientProfile;

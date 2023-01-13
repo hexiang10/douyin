@@ -29,7 +29,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册拦截器
         registry.addInterceptor(passportInterceptor()).
-                addPathPatterns("/user/getSMSCode");
+                addPathPatterns("/passport/getSMSCode");
         // 会话拦截器
         //registry.addInterceptor(userTokenInterceptor()).
         //        addPathPatterns("/userInfo/modifyUserInfo","/userInfo/modifyImage");

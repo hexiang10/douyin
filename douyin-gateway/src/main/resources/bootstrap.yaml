@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: douyin-gateway # 服务名称
+  servlet:
+    multipart:
+      max-file-size: 1G
+      max-request-size: 1G
   cloud:
     nacos:
       config:
@@ -26,7 +30,7 @@ spring:
 #    subscribed-services: user-service
 
 gateway:
-  excludedUrls: /user/login,/user/logout,/user/getSMSCode
+  excludedUrls: /passport/login,/passport/logout,/passport/getSMSCode
 
 --- # 网关配置
 #spring:
