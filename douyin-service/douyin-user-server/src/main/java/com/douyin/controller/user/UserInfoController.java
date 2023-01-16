@@ -65,29 +65,18 @@ public class UserInfoController extends BaseProperties<User> {
         String likedVlogCountsStr = redis.get(REDIS_VLOG_BE_LIKED_COUNTS + ":" + userId);
         String likedVlogerCountsStr = redis.get(REDIS_VLOGER_BE_LIKED_COUNTS + ":" + userId);
 
-        Integer myFollowsCounts=0;
-        Integer myFansCounts=0;
-        Integer likedVlogCounts=0;
-        Integer likedVlogerCounts=0;
-        Integer totalLikeMeCounts=0;
-
         if(StringUtils.isNotBlank(myFollowsCountsStr)){
-            myFollowsCounts = Integer.valueOf(myFollowsCountsStr);
+            userVo.setMyFollowsCounts(Integer.valueOf(myFollowsCountsStr));
         }
         if(StringUtils.isNotBlank(myFansCountsStr)){
-            myFansCounts = Integer.valueOf(myFollowsCountsStr);
+            userVo.setMyFansCounts(Integer.valueOf(myFollowsCountsStr));
         }
         if(StringUtils.isNotBlank(likedVlogCountsStr)){
-            likedVlogCounts = Integer.valueOf(likedVlogCountsStr);
+            userVo.setTotalLikeMeCounts(userVo.getTotalLikeMeCounts()+Integer.parseInt(likedVlogCountsStr));
         }
         if(StringUtils.isNotBlank(likedVlogerCountsStr)){
-            likedVlogerCounts = Integer.valueOf(likedVlogerCountsStr);
+            userVo.setTotalLikeMeCounts(userVo.getTotalLikeMeCounts()+Integer.parseInt(likedVlogerCountsStr));
         }
-        totalLikeMeCounts = likedVlogCounts + likedVlogerCounts;
-
-        userVo.setMyFollowsCounts(myFollowsCounts);
-        userVo.setMyFansCounts(myFansCounts);
-        userVo.setTotalLikeMeCounts(totalLikeMeCounts);
 
         return GraceJSONResult.ok(userVo);
     }

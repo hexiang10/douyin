@@ -1,7 +1,7 @@
 package com.douyin.common.properties;
 
 
-import com.douyin.common.utils.RedisCacheUtils;
+import com.douyin.common.utils.RedisCacheUtil;
 import com.douyin.common.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +13,7 @@ public class BaseProperties<T> {
     public RedisUtil redis;
 
     @Resource
-    public RedisCacheUtils<T> redisCache;
+    public RedisCacheUtil<T> redisCache;
 
     public static final String MOBILE_SMSCODE = "mobile:smscode";
     public static final String REDIS_USER_TOKEN = "redis_user_token";

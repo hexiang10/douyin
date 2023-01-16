@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public GraceJSONResult returnMaxUploadSize(MaxUploadSizeExceededException e) {
         e.printStackTrace();
-        return GraceJSONResult.errorCustom(ResponseStatusEnum.FILE_MAX_SIZE_2MB_ERROR);
+        return GraceJSONResult.errorCustom(ResponseStatusEnum.FILE_MAX_SIZE_1G_ERROR);
     }
 
     public Map<String, Object> getErrors(BindingResult bindingResult ) {

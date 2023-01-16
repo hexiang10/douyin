@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
  * RedisTemplate 工具类
  */
 @Component
-public class RedisCacheUtils<T> {
+public class RedisCacheUtil<T> {
 
     @Resource
     RedisTemplate<String, T> redisTemplate;

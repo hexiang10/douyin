@@ -3,11 +3,14 @@ package com.douyin.service.middleware.impl;
 import com.douyin.common.enums.FileTypeEnum;
 import com.douyin.common.enums.ResponseStatusEnum;
 import com.douyin.common.exception.GraceException;
+import com.douyin.common.results.GraceJSONResult;
 import com.douyin.common.utils.StringUtil;
 import com.douyin.config.middleware.MinIOConfig;
 import com.douyin.framework.domain.user.User;
+import com.douyin.framework.domain.video.vo.VideoUploadVO;
 import com.douyin.service.middleware.MinioService;
 import com.douyin.utils.middleware.MinIOUtil;
+import com.douyin.utils.middleware.VideoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,4 +64,34 @@ public class MinioServiceImpl implements MinioService {
         }
         return userUpdateBo;
     }
+
+    /**
+     * 上传视频
+     * @param userId 用户id
+     * @param originalFilename 原始文件名
+     * @param fileSize 文件大小
+     * @param arr 文件流
+     */
+    @Override
+    public GraceJSONResult uploadVideo(String userId, String originalFilename, long fileSize, byte[] arr) {
+        String videoName = "Video/" + userId + "/"+ originalFilename+"_info/"+StringUtil.getCurrentTimeStr()+"_"+originalFilename;
+        try {
+            MinIOUtil.uploadFile(minIOConfig.getBucketName(),videoName,new ByteArrayInputStream(arr));
+        } catch (Exception e) {
+            GraceException.display(ResponseStatusEnum.VIDEO_UPLOAD_FAILD);
+        }
+        String videoPath = minIOConfig.getFileHost() + "/" + minIOConfig.getBucketName() + "/" + videoName;
+        String coverName = videoName+"_cover.jpg" ;
+        try {
+            MinIOUtil.uploadFile(minIOConfig.getBucketName(),coverName,VideoUtil.getScreenshot(videoPath));
+        } catch (Exception e) {
+            GraceException.display(ResponseStatusEnum.VIDEO_COVER_UPLOAD_FAILD);
+        }
+        String coverPath = minIOConfig.getFileHost() + "/" + minIOConfig.getBucketName() + "/" + coverName;
+        VideoUploadVO videoUploadVO = new VideoUploadVO();
+        videoUploadVO.setVideoPath(videoPath);
+        videoUploadVO.setCoverPath(coverPath);
+        return GraceJSONResult.ok(videoUploadVO);
+    }
+
 }

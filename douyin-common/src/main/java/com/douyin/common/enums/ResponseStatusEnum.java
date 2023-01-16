@@ -29,10 +29,12 @@ public enum ResponseStatusEnum {
     FILE_FORMATTER_FAILD(512,false,"文件图片格式不支持！"),
     FILE_MAX_SIZE_500KB_ERROR(5131,false,"仅支持500kb大小以下的图片上传！"),
     FILE_MAX_SIZE_2MB_ERROR(5132,false,"仅支持2MB大小以下的图片上传！"),
+    FILE_MAX_SIZE_1G_ERROR(5133,false,"仅支持1G大小以下的文件上传！"),
     FILE_NOT_EXIST_ERROR(514,false,"你所查看的文件不存在！"),
     USER_STATUS_ERROR(515,false,"用户状态参数出错！"),
     USER_NOT_EXIST_ERROR(516,false,"用户不存在！"),
-
+    VIDEO_UPLOAD_FAILD(517,false,"视频上传失败！"),
+    VIDEO_COVER_UPLOAD_FAILD(518,false,"视频封面获取失败！"),
     // 自定义系统级别异常 54x
     SYSTEM_INDEX_OUT_OF_BOUNDS(541, false, "系统错误，数组越界！"),
     SYSTEM_ARITHMETIC_BY_ZERO(542, false, "系统错误，无法除零！"),

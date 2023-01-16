@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Date;
 import java.util.Map;
 
-public class JwtUtils {
+public class JwtUtil {
 
     // TOKEN的有效期1小时（S）
     private static final int TOKEN_TIME_OUT = 7 * 24 * 3600;
