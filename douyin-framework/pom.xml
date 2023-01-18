@@ -51,5 +51,11 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ejlchina</groupId>
+            <artifactId>bean-searcher-boot-starter</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
     </dependencies>
 </project>

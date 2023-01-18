@@ -59,12 +59,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String userId = sid.nextShort();
         user.setId(userId);
         user.setMobile(mobile);
-        user.setImoocNum(userId);
+        user.setImoocNum("DY"+mobile);
         user.setNickname("用户：" + DesensitizationUtil.commonDisplay(mobile));
         user.setFace("https://img-blog.csdnimg.cn/2592a77c1b45499ea109d39d67aa827b.jpeg");
+        user.setBgImg("https://img-blog.csdnimg.cn/a29d24a864c94d089c3850c705d44197.png");
         user.setBirthday(new Date());
         user.setSex(Sex.secret.type);
         user.setCountry("中国");
+        user.setProvince("");
+        user.setCity("");
         user.setDescription("这个家伙很懒，什么都没留下~");
         userMapper.insert(user);
         return user;

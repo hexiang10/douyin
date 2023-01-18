@@ -88,12 +88,6 @@ public class User extends BaseEntity {
     private String city;
 
     /**
-     * 区县
-     */
-    @TableField("district")
-    private String district;
-
-    /**
      * 简介
      */
     @TableField("description")
@@ -110,6 +104,12 @@ public class User extends BaseEntity {
      */
     @TableField("can_imooc_num_be_updated")
     private Integer canImoocNumBeUpdated;
+
+    /**
+     * 用户状态
+     */
+    @TableField("state")
+    private Integer state;
 
 
 }

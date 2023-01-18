@@ -26,4 +26,4 @@ spring:
             refresh: true
 dubbo:
   cloud:
-    subscribed-services: douyin-middleware-server
+    subscribed-services: douyin-user-server,douyin-middleware-server

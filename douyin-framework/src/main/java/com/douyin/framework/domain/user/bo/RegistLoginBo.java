@@ -1,9 +1,7 @@
 package com.douyin.framework.domain.user.bo;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -14,8 +12,6 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class RegistLoginBo {
     @NotBlank(message = "手机号不能为空")
     @Length(min = 11, max = 11, message = "手机号长度不正确")

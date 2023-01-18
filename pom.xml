@@ -36,6 +36,7 @@
         <minio.version>8.2.1</minio.version>
         <dubbo.version>2.7.8</dubbo.version>
         <jwt.version>0.9.1</jwt.version>
+        <pagehelper-spring-boot-starter.version>1.2.12</pagehelper-spring-boot-starter.version>
     </properties>
 
 
@@ -140,6 +141,13 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
+            </dependency>
+
+            <!--pagehelper -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper-spring-boot-starter.version}</version>
             </dependency>
 
         </dependencies>

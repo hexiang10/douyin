@@ -2,7 +2,7 @@ server:
   port: 8888
 spring:
   application:
-    name: douyin-gateway # 服务名称
+    name: douyin-gateway
   servlet:
     multipart:
       max-file-size: 1G
@@ -12,8 +12,8 @@ spring:
       config:
         group: dev
         namespace: e2a06f55-6efb-4898-a990-f43c9f455579
-        server-addr: 1.12.42.148:8848 # Nacos地址
-        file-extension: yaml # 文件后缀名
+        server-addr: 1.12.42.148:8848
+        file-extension: yaml
         shared-configs:
           - dataId: common.yaml
             group: dev
@@ -22,46 +22,6 @@ spring:
           - dataId: redis.yaml
             group: dev
             refresh: true
-#          - dataId: dubbo.yaml
-#            group: dev
-#            refresh: true
-#dubbo:
-#  cloud:
-#    subscribed-services: user-service
 
 gateway:
-  excludedUrls: /passport/login,/passport/logout,/passport/getSMSCode
-
---- # 网关配置
-#spring:
-#  cloud:
-#    gateway:
-#      # 全局的跨域处理
-#      globalcors:
-#        # 解决options请求被拦截问题
-#        add-to-simple-url-handler-mapping: true
-#        corsConfigurations:
-#          '[/**]':
-#            # 允许在请求中携带的头信息
-#            allowedHeaders: "*"
-#            # 允许哪些网站的跨域请求
-#            allowedOrigins: "*"
-#            # 是否允许携带cookie
-#            allowCredentials: true
-#            # 这次跨域检测的有效期
-#            maxAge: 360000
-#            # 允许的跨域ajax的请求方式
-#            allowedMethods:
-#              - "GET"
-#              - "POST"
-#              - "DELETE"
-#              - "PUT"
-#              - "OPTIONS"
-#      routes:
-#        # 用户系统
-#        - id: douyin-user-server
-#          uri: lb://douyin-user-server
-#          predicates:
-#            - Path=/user/**
-#          # filters:
-#          #   - StripPrefix= 1
+  excludedUrls: /passport/getSMSCode,/passport/logout,/user/login,/vlog/list,/vlog/detail

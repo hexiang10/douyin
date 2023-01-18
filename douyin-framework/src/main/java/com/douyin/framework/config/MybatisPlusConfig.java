@@ -23,10 +23,10 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 分页插件
-        interceptor.addInnerInterceptor(paginationInnerInterceptor());
         // 乐观锁插件
         interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+        // 分页插件
+        interceptor.addInnerInterceptor(paginationInnerInterceptor());
         return interceptor;
     }
 

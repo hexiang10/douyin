@@ -8,7 +8,7 @@
 //import org.springframework.web.util.pattern.PathPatternParser;
 //
 ///**
-// * 跨域支持
+// * 跨域支持 (若配置文件不生效，则打开使用)
 // */
 //@Configuration
 //public class CorsConfig {

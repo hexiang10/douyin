@@ -17,7 +17,7 @@ public class CodeGenerator {
     // TODO 项目名称
     private static final String PROJECT_NAME = "douyin";
     // TODO 服务名称
-    private static final String SERVER_NAME = "user";
+    private static final String SERVER_NAME = "fans";
   	// TODO 数据库地址
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/douyin_cloud?useUnicode=true&characterEncoding =UTF-8&serverTimezone = Asia/Shanghai";
 	// TODO 数据库用户名
@@ -35,7 +35,7 @@ public class CodeGenerator {
      * 项目路径配置
      */
     private static final String PARENT_DIR = System.getProperty("user.dir");
-    private static final String CLOUD_NAME = PROJECT_NAME+"-service/"+SERVER_NAME+"-service";
+    private static final String CLOUD_NAME = PROJECT_NAME+"-service/"+PROJECT_NAME+"-"+SERVER_NAME+"-server";
     private static final String PACKAGE_DIR = "/com/"+PROJECT_NAME;
     private static final String MODEL_DIR = "/com/"+PROJECT_NAME+"/framework/domain";
     private static final String PACKAGE_EXE = "com."+PROJECT_NAME;

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.douyin.mapper.vlog.VlogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.douyin.framework.domain.vlog.Vlog">
+        <id column="id" property="id" />
+        <result column="del_flag" property="delFlag" />
+        <result column="vloger_id" property="vlogerId" />
+        <result column="url" property="url" />
+        <result column="cover" property="cover" />
+        <result column="title" property="title" />
+        <result column="width" property="width" />
+        <result column="height" property="height" />
+        <result column="like_counts" property="likeCounts" />
+        <result column="comments_counts" property="commentsCounts" />
+        <result column="is_private" property="isPrivate" />
+        <result column="state" property="state" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        del_flag, state,
+        id, vloger_id, url, cover, title, width, height, like_counts, comments_counts, is_private
+    </sql>
+
+    <select id="getVlogList"  parameterType="map" resultType="com.douyin.framework.domain.vlog.vo.VlogIndexVO">
+
+        SELECT
+            v.id as vlogId,
+            v.vloger_id as vlogerId,
+            u.face as vlogerFace,
+            u.nickname as vlogerName,
+            v.title as content,
+            v.url as url,
+            v.cover as cover,
+            v.width as width,
+            v.height as height,
+            v.like_counts as likeCounts,
+            v.comments_counts as commentsCounts,
+            v.is_private as isPrivate
+        FROM
+            dy_vlog v
+        LEFT JOIN
+            dy_user u
+        ON
+            v.vloger_id = u.id
+        WHERE
+            v.is_private = 0
+        <if test="paramMap.search != null and paramMap.search != ''">
+            AND
+                v.title like '%${paramMap.search}%'
+        </if>
+        ORDER BY
+            v.created_time
+        DESC
+
+    </select>
+    <select id="getVlogById" parameterType="map" resultType="com.douyin.framework.domain.vlog.vo.VlogIndexVO">
+
+        SELECT
+            v.id as vlogId,
+            v.vloger_id as vlogerId,
+            u.face as vlogerFace,
+            u.nickname as vlogerName,
+            v.title as content,
+            v.url as url,
+            v.cover as cover,
+            v.width as width,
+            v.height as height,
+            v.like_counts as likeCounts,
+            v.comments_counts as commentsCounts,
+            v.is_private as isPrivate
+        FROM
+            dy_vlog v
+        LEFT JOIN
+            dy_user u
+        ON
+            v.vloger_id = u.id
+        WHERE
+            v.id = #{paramMap.vlogId}
+
+    </select>
+
+</mapper>

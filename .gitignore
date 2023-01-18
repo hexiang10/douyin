@@ -45,7 +45,7 @@ nbdist/
 !*/build/*.html
 !*/build/*.xml
 
-docs/*
+doc/*
 douyin-admin/*
 douyin-app/*
 资料/*
