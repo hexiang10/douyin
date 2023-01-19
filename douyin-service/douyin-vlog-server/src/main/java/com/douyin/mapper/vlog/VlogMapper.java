@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.douyin.framework.domain.vlog.Vlog;
 import com.douyin.framework.domain.vlog.vo.VlogIndexVO;
+import com.douyin.framework.domain.vlog.vo.VlogMyLikedVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 @Mapper
 public interface VlogMapper extends BaseMapper<Vlog> {
     /**
-     * 获取视频信息展示在列表
+     * 分页查询视频信息展示在列表
      * @param paramMap 查询条件集合
      */
     public IPage<VlogIndexVO> getVlogList(IPage<VlogIndexVO> page,@Param("paramMap") Map<String, Object> paramMap);
@@ -31,5 +32,24 @@ public interface VlogMapper extends BaseMapper<Vlog> {
      * @param paramMap 查询条件
      */
     public List<VlogIndexVO> getVlogById(@Param("paramMap") Map<String, Object> paramMap);
+
+    /**
+     * 分页查询用户喜欢的视频
+     * @param paramMap 查询条件集合
+     */
+    public IPage<VlogMyLikedVO> getMyLikedVlogList(IPage<VlogMyLikedVO> page, @Param("paramMap") Map<String, Object> paramMap);
+
+    /**
+     * 分页查询用户关注用户的视频
+     * @param paramMap 查询条件集合
+     */
+    public IPage<VlogIndexVO> getMyFollowVlogList(IPage<VlogIndexVO> page,@Param("paramMap") Map<String, Object> paramMap);
+
+    /**
+     * 分页查询用户朋友的视频
+     * @param paramMap 查询条件集合
+     */
+    public IPage<VlogIndexVO> getMyFriendVlogList(IPage<VlogIndexVO> page,@Param("paramMap") Map<String, Object> paramMap);
+
 
 }

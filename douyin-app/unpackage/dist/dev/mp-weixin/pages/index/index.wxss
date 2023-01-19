@@ -1,0 +1,169 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* index start */
+.page.data-v-8ddf7c9c {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+/* index end */
+/* 顶部选项卡 start */
+.header.data-v-8ddf7c9c {
+	position: absolute;
+	left: 0;
+	right: 0;
+	flex-direction: row;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: center;
+	padding-left: 40rpx;
+	padding-right: 40rpx;
+}
+.header-center.data-v-8ddf7c9c {
+	flex: 1;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.header-left.data-v-8ddf7c9c,
+.header-right.data-v-8ddf7c9c {
+	color: #999;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: flex-start;
+	justify-content: flex-end;
+	font-family: iconfont;
+}
+.header-right-search.data-v-8ddf7c9c {
+	height: 100rpx;
+	/* align-items: flex-start;
+	justify-content: flex-end; */
+}
+.header-item.data-v-8ddf7c9c {
+	align-items: center;
+	margin-left: 6rpx;
+	margin-right: 6rpx;
+}
+.header-item-title.data-v-8ddf7c9c {
+	width: 120rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-refresh-title.data-v-8ddf7c9c {
+	width: 300rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-item-line.data-v-8ddf7c9c {
+	height: 5rpx;
+	line-height: 8rpx;
+	width: 60rpx;
+	border-radius: 8rpx;
+}
+/* 顶部选项卡 end */
+/* 选项卡轮播组件 start */
+.my-swiper.data-v-8ddf7c9c {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+.near-by.data-v-8ddf7c9c {
+	background-color: #000000;
+	align-items: center;
+	justify-content: center;
+}
+.my-follow.data-v-8ddf7c9c {
+	background-color: #000000;
+	align-items: center;
+	justify-content: center;
+}
+/* 选项卡轮播组件 end */
+.warn-info.data-v-8ddf7c9c {
+	color: #FFFFFF;
+	font-size: 36rpx;
+	font-weight: 600;
+}
+.normal-img.data-v-8ddf7c9c {
+	width: 50rpx;
+	height: 50rpx;
+	opacity: 0.8;
+}
+

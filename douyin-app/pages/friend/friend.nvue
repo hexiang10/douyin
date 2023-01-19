@@ -1,0 +1,241 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+
+.waterfall-wrapper {
+	background-color: #000;
+}
+.every-single-video {
+	display: flex;
+	flex-direction: column;
+	margin-top: 5px;
+}
+.half-cover {
+	border-top-left-radius: 5px; 
+	border-top-right-radius: 5px;
+}
+.vloger-name {
+	font-size: 12px;
+	color: #FFFFFF;
+	lines: 2;
+	text-overflow: ellipsis;
+	margin-left: 10px;
+}
+.bottom-part {
+	padding: 5px;
+	margin-top: 2px;
+}
+.bottom-vlog-content {
+	font-size: 12px;
+	color: #FFFFFF;
+	lines: 2;
+	text-overflow: ellipsis;
+}
+.vloger-info-box {
+	margin: 5px 0;
+	display: flex;
+	flex-direction: row;
+}
+.vloger-face {
+	width: 50rpx;
+	height: 50rpx;
+	border-radius: 10px;
+}
+.vloger-name-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.refresh-text {
+	color: #FFFFFF;
+	width: 750rpx;
+	align-items: center;
+	text-align: center;
+	height: 80rpx;
+}
+</style>
+
+<template>
+	<view class="page">
+		<view :style="{height: statusBarHeight + 'px'}">
+		  <!-- 这里是状态栏, 每个页面都需要有，目的不让页面覆盖状态栏 -->
+		</view>
+		<view class="waterfall-wrapper" :style="{height: screenHeight + 'px'}">
+			<waterfall 
+				:style="{height: screenHeight + 'px'}" 
+				column-count="2" 
+				column-width="auto" 
+				column-gap="1px" 
+				left-gap="3px" 
+				right-gap="2px">
+				<refresh 
+					v-if="myUserInfo != null"
+					@pullingdown="onpullingdown" 
+					@refresh="onrefresh" 
+					:display="refreshing ? 'show' : 'hide'">
+						<text class="refresh-text" style="">{{refreshText}}</text>
+						<loading-indicator></loading-indicator>
+				</refresh>
+			    <cell v-for="(vlog, index) in waterList" :key="index" >
+					<view class="every-single-video" @appear="appearVlog(index)">
+						<image 
+							:src="vlog.cover" 
+							mode="widthFix" 
+							class="half-cover"
+							:style="{width: vlogWidth + 'px'}"
+							@click="goToVlog(vlog.vlogId)">
+						<view class="bottom-part">
+							<text class="bottom-vlog-content">{{vlog.content}}</text>
+							<view class="vloger-info-box">
+								<image :src="vlog.vlogerFace" class="vloger-face"></image>
+								<view class="vloger-name-box">
+									<text class="vloger-name" style="align-content: center;">{{vlog.vlogerName}}</text>
+								</view>
+							</view>
+						</view>
+						
+					</view>
+			    </cell>
+			  </waterfall>
+		</view>
+	</view>
+</template>
+
+<script>
+	var system = uni.getSystemInfoSync();
+	var app = getApp();
+	export default {
+		data() {
+			return {
+				screenHeight: 0,
+				statusBarHeight: 0,
+				vlogWidth:0,
+				// waterList: getApp().getDefaultVlogList()
+				
+				waterList: [],
+				page: 0,
+				totalPage: 0,
+				
+				refreshing: false,
+				refreshText: "下拉刷新中...",
+				myUserInfo: null
+			}
+		},
+		onLoad() {
+			this.statusBarHeight = system.statusBarHeight;
+			var screenWidth = system.screenWidth;
+			this.vlogWidth = (screenWidth-10)/2;
+			
+			// var screenHeight = system.safeArea.bottom + 50;
+			var screenHeight = system.safeArea.bottom - 10;
+			this.screenHeight = screenHeight;
+			// console.log(this.screenWidth);
+			this.myUserInfo = app.getUserInfoSession();
+		},
+		onShow() {
+			this.page = 0;
+			this.fetchList(0);
+		},
+		methods: {
+			// 下拉刷新的过程中，会触发
+			onpullingdown(e) {
+				// console.log("222 -- " + this.onpullingdown);
+			},
+			onrefresh(e) {
+				// console.log("111 -- " + this.refreshing);
+				var me = this;
+				
+				this.refreshing = true;
+				setTimeout(() => { 
+					this.refreshing = false;
+					this.refreshText = '下拉刷新中...'
+					uni.stopPullDownRefresh();
+				}, 300)
+							
+				// 通过list组件的下拉刷新触发当前所在页面的下拉刷新
+				this.page = 0;
+				this.fetchList(0);
+				uni.startPullDownRefresh();
+			},
+			
+			loadMore() {
+				if (this.page >= this.totalPage) {
+					return;
+				} else {
+					this.fetchList(this.page);
+				}
+			},
+			fetchList(page) {
+				uni.stopPullDownRefresh();
+				var me = this;
+				
+				var myUserInfo = app.getUserInfoSession();
+				if (myUserInfo == null) {
+					me.waterList = [];
+					uni.showToast({
+						duration: 1500,
+						title: '请登录~',
+						icon: 'none'
+					});
+					return;
+				}
+				
+				page = page + 1;
+				
+				var userId = getApp().getUserInfoSession().id;
+				var serverUrl = app.globalData.serverUrl;
+				uni.request({
+					method: "GET",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/vlog/friendList?myId=" + userId + "&page=" + page + "&pageSize=10",
+					success(result) {
+						// console.log(result);
+						
+						if (result.data.status == 200) {
+							var waterList = result.data.data.rows;
+							var totalPage = result.data.data.total;
+							
+							if (page == 1) {
+								me.waterList = [];
+							}
+							
+							me.waterList = me.waterList.concat(waterList);
+							me.page = page;
+							me.totalPage = totalPage;
+						} 
+						uni.stopPullDownRefresh();
+					}
+				});
+			},
+			
+			goToVlog(vlogId) {
+				uni.navigateTo({
+					url: "../vlog/vlog?vlogId=" + vlogId
+				})
+			},
+			
+			// 每个vlog出现都会触发
+			appearVlog(index, e) {
+				var me = this;
+				// console.log("appearVlog --- e=" + JSON.stringify(e));
+				// console.log("appearVlog --- index=" + index);
+				// 如果最后一个vlog出现，则加载更多
+				if(index == (me.waterList.length - 1)) {
+					// var newList = getApp().getDefaultVlogList();
+					// me.waterList = me.waterList.concat(newList);
+					me.loadMore();
+				}
+			}
+		}
+	}
+</script>
+

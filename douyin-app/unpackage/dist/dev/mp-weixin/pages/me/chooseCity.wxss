@@ -1,0 +1,72 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+.place-box {
+	background-color: #4a4c52;
+}
+.place-box-touched {
+	background-color: #6d6b6b;
+}
+.right-arrow {
+	width: 32rpx;
+	height: 32rpx;
+	margin-left: 20rpx;
+}
+
+/* .area-item {
+	padding-left: 30rpx;
+	padding-right: 30rpx;
+	width: 750rpx;
+	height: 120rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+} */
+.active {
+	background-color: #4a4c52;
+}
+

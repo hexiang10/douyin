@@ -1,0 +1,69 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/friend/friend",
+    "pages/vlog/vlog",
+    "pages/publish/publish",
+    "pages/me/me",
+    "pages/me/vlogerInfo",
+    "pages/message/message",
+    "pages/publish/preview",
+    "pages/search/search",
+    "pages/search/searchList",
+    "pages/qrcode/qrcode",
+    "pages/loginRegist/loginRegist",
+    "pages/me/myBackImg",
+    "pages/me/myFace",
+    "pages/me/myInfo",
+    "pages/me/modifyNickname",
+    "pages/me/modifyIMoocNum",
+    "pages/me/modifyDesc",
+    "pages/me/modifySex",
+    "pages/me/modifyBirthday",
+    "pages/me/modifyLocation",
+    "pages/me/chooseProvince",
+    "pages/me/chooseCity",
+    "pages/me/settings",
+    "pages/me/myFans",
+    "pages/me/myFollows"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarBackgroundColor": "#000000",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "uni-app",
+    "backgroundColor": "#000000"
+  },
+  "tabBar": {
+    "color": "#999696",
+    "selectedColor": "#FFFFFF",
+    "borderStyle": "black",
+    "backgroundColor": "#0e0d0d",
+    "fontSize": "16px",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/friend/friend",
+        "text": "朋友"
+      },
+      {
+        "pagePath": "pages/message/message",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我"
+      }
+    ],
+    "midButton": {
+      "height": "38px",
+      "iconWidth": "40px",
+      "iconPath": "static/images/douyin.png"
+    }
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

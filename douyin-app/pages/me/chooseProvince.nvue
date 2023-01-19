@@ -1,0 +1,106 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.place-box {
+	background-color: #4a4c52;
+}
+.place-box-touched {
+	background-color: #6d6b6b;
+}
+
+.right-arrow {
+	width: 32rpx;
+	height: 32rpx;
+	margin-left: 20rpx;
+}
+
+/* .area-item {
+	padding-left: 30rpx;
+	padding-right: 30rpx;
+	width: 750rpx;
+	height: 120rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+} */
+.active {
+	background-color: #4a4c52;
+}
+</style>
+<template>
+	<view class="page">
+		<view class="line"></view>
+			
+		<scroll-view scroll-y="true">
+			<view 
+				v-for="(item, index) in provinceList"
+				:class="{active : index == activeIndex}"
+				:key="index"
+				@click="chooseLocation(item.province_id, item.province_name)" 
+				@touchstart="touchstartLocation(index)"
+				@touchend="touchendLocation()"
+				style="padding-left: 30rpx;padding-right: 30rpx;width: 750rpx;height: 120rpx;display: flex;flex-direction: row;justify-content: space-between;">
+				
+				<text style="color: #FFFFFF;align-self: center;font-size: 15px;">{{item.province_name}}</text>
+
+				<view class="" style="display: flex;flex-direction: row;justify-content: flex-start;align-self: center;">
+					<image
+						class="right-arrow" 
+						style="align-self: center;" 
+						src="/static/images/icon-right-arrow2.png" ></image>
+				</view>
+				
+			</view>
+		</scroll-view>
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		components: {
+		},
+		data() {
+			return {
+				placeTouched: false,
+				provinceList: [],
+				activeIndex: -1
+			}
+		},
+		onLoad() {
+			var provinceList = getApp().globalData.provinceList;
+			this.provinceList = provinceList;
+		},
+		methods: {
+			updateBirthday() {
+			},
+			touchstartLocation(index) {
+				this.activeIndex = index;
+			},
+			touchendLocation() {
+				this.activeIndex = -1;
+			},
+			chooseLocation(provinceId, provinceName) {
+				uni.setStorageSync("myLocationProvince", provinceName);
+				
+				uni.navigateTo({
+					url: "chooseCity?provinceId=" + provinceId
+				})
+			}
+		}
+	}
+</script>
+

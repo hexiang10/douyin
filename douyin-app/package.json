@@ -1,0 +1,9 @@
+{
+    "id": "ss-select-city",
+    "name": "城市选择",
+    "version": "1.0.1",
+    "description": "城市选择组件",
+    "keywords": [
+        "城市，地区"
+    ]
+}

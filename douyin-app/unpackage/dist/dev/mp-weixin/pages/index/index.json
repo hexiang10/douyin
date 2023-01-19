@@ -1,0 +1,7 @@
+{
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "video-comp": "/components/videoComp",
+    "video-follow-comp": "/components/videoFollowComp"
+  }
+}

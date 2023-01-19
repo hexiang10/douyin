@@ -1,0 +1,678 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+
+
+.header {
+	position: absolute;
+	left: 0;
+	right: 0;
+	flex-direction: row;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: center;
+	padding-left: 40rpx;
+	padding-right: 40rpx;
+}
+
+.header-center {
+	flex: 1;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.header-left,
+.header-right {
+	color: #999;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: flex-start;
+	justify-content: flex-end;
+	font-family: iconfont;
+}
+
+.header-right-search {
+	height: 100rpx;
+	/* align-items: flex-start;
+	justify-content: flex-end; */
+}
+
+.header-item {
+	align-items: center;
+	margin-left: 6rpx;
+	margin-right: 6rpx;
+}
+
+.header-item-title {
+	width: 120rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-refresh-title {
+	width: 300rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-item-line {
+	height: 5rpx;
+	line-height: 8rpx;
+	width: 60rpx;
+	border-radius: 8rpx;
+}
+
+
+.page-write {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #FFFFFF;
+}
+
+.constellation {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #000000;
+	opacity: 0.5;
+	width: 130rpx;
+	height: 40rpx;
+	border-radius: 10px;
+}
+
+.animal {
+	margin-left: 10rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #000000;
+	opacity: 0.5;
+	width: 60rpx;
+	height: 40rpx;
+	border-radius: 10px;
+}
+
+.tab-wrapper {
+	position: relative; 
+	top: -480rpx;
+	height: 40px;
+	background-color: #171825;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-top: 3px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+}
+.tab-normal {
+	font-size: 18px;
+	font-weight: 500;
+	/* align-self: center; */
+	color: #808080;
+}
+.tab-unselected {
+	color: #808080;
+}
+.tab-selected {
+	color: #FFFFFF;
+}
+
+.vlog-list {
+	position: relative; 
+	top: -480rpx;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	background-color: #000000;
+}
+.vlog-cover {
+	width: 248rpx;
+	height: 360rpx;
+	border-width: 1rpx;
+}
+/* 解决flex布局 space-between最后一行两边分布的问题 */
+/* .vlog-list:after { 
+    content: ''; 
+    width: 249rpx;   
+}
+.blank-temp {
+    width: 249px;
+	height: 0;
+	border: 1px solid transparent;
+	overflow: hidden;
+} */
+.login-info-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.login-info {
+	color: #FFFFFF;
+	font-size: 36rpx;
+	font-weight: 600;
+}
+</style>
+
+<template>
+	<view class="page">
+		
+
+		
+		<scroll-view :style="{height: screenHeight + 'px'}" scroll-y="true" lower-threshold="250" @scrolltolower="loadMore"> 
+		<!-- <view :style="{height: screenHeight + 'px'}"> -->
+			<image id="mybg" 
+				:src="userBgImg" 
+				mode="aspectFill" 
+				style="width: 750rpx;height: 750rpx; box-shadow: inset 0 -150px 180px #313030;"></image>
+			
+			<!-- 安卓下使用一个灰色图片来替代阴影效果，ios支持阴影，安卓则不支持，，，坑爹 -_-!!! -->
+			<image v-if="isAndroid" class="page" @click.self="changeMyBg()" src="../../static/images/bg.png" mode="aspectFill" style="width: 750rpx;height: 700rpx;opacity: 0.5;"></image>
+			
+			<view style="position: relative; left: 30rpx;top: -560rpx;display: flex;flex-direction: column;width: 500rpx;">
+				<view style="display: flex;flex-direction: row;">
+					<image 
+						:src="pageUserInfo.face" 
+						mode="scaleToFill" 
+						style="width: 200rpx;height: 200rpx;border-radius: 100rpx;border-width: 1px;border-color: #F1F1F1;"></image>
+					<view style="margin-left: 30rpx;padding-top: 20rpx;">
+						<text style="font-size: 20px;color: #FFFFFF;font-weight: 600;">{{pageUserInfo.nickname}}</text>
+						<view style="display: flex;flex-direction: row;">
+							<text style="font-size: 10px;color: #FFFFFF;font-weight: 300;">抖音号：</text>
+							<text style="font-size: 10px;color: #FFFFFF;font-weight: 300;">{{pageUserInfo.imoocNum}}</text>
+						</view>
+
+						<view style="display: flex;flex-direction: row;margin-top: 10rpx;">
+							<view class="constellation">
+								<image v-if="pageUserInfo.sex==1" src="../../static/images/icon-sex-boy.png" style="width: 22rpx;height: 22rpx;align-self: center;"></image>
+								<image v-if="pageUserInfo.sex==0" src="../../static/images/icon-sex-girl.png" style="width: 22rpx;height: 22rpx;align-self: center;"></image>
+								<text style="font-size: 10px;color: #FFFFFF;font-weight: bold;margin-left: 6rpx;align-self: center;">{{astro}}座</text>
+							</view>
+							<view class="animal">
+								<text style="font-size: 10px;color: #FFFFFF;font-weight: bold;align-self: center;">{{animal}}</text>
+							</view>
+						</view>
+					</view>
+				</view>
+				
+			</view>
+			
+			<text style="position: relative; top: -520rpx;color: #ffffff;font-size: 14px;margin: 0 30rpx;">{{pageUserInfo.description}}</text>
+			<!-- <text style="position: relative; top: -520rpx;color: #ffffff;font-size: 14px;margin: 0 30rpx;">10年＋IT互联网老司机。5年在线教育经验。曾任技术经理、项目经理、技术总监、部门经理。福瑞博课创始人&CTO。</text> -->
+			
+			<view style="position: relative; top: -510rpx;display: flex;flex-direction: row;justify-content: space-between;">
+				<view style="display: flex;flex-direction: row;">
+					<view style="margin-left: 30rpx;display: flex;flex-direction: column;justify-content: center;">
+						<text style="color: #ffffff;font-size: 14px;font-weight: bold;align-self: center;">{{getGraceNumber(pageUserInfo.myFollowsCounts)}}</text>
+						<text style="color: #ffffff;font-size: 12px;font-weight: 300;align-self: center;">关注</text>
+					</view>
+					<view style="margin-left: 50rpx;display: flex;flex-direction: column;justify-content: center;">
+						<text style="color: #ffffff;font-size: 14px;font-weight: bold;align-self: center;">{{getGraceNumber(pageUserInfo.myFansCounts)}}</text>
+						<text style="color: #ffffff;font-size: 12px;font-weight: 300;align-self: center;">粉丝</text>
+					</view>
+					<view style="margin-left: 50rpx;display: flex;flex-direction: column;justify-content: center;">
+						<text style="color: #ffffff;font-size: 14px;font-weight: bold;align-self: center;">{{getGraceNumber(pageUserInfo.totalLikeMeCounts)}}</text>
+						<text style="color: #ffffff;font-size: 12px;font-weight: 300;align-self: center;">获赞</text>
+					</view>
+				</view>
+				
+				<view style="display: flex;flex-direction: row;justify-content: center;margin-right: 30rpx;">
+					
+					<!-- 判断当前页是否是自己，如果是自己则显示编辑资料和设置，如果不是，则显示关注或取关 -->
+					
+					<view 
+						v-if="isMe" 
+						@click="goMyInfo()"
+						style="margin-left: 20rpx;border-width: 1px;border-color: #FFFFFF;width: 200rpx;height: 66rpx;background-color: #545456;opacity: 0.8;border-radius: 40rpx;display: flex;flex-direction: row;justify-content: center;align-self: center;">
+						<text style="font-size: 13px;color: #FFFFFF;font-weight: 500;align-self: center;">编辑资料</text>
+					</view>
+					<view 
+						v-if="isMe" 
+						@click="goSettings()"
+						style="margin-left: 20rpx;border-width: 1px;border-color: #FFFFFF;width: 100rpx;height: 66rpx;background-color: #545456;opacity: 0.8;border-radius: 40rpx;display: flex;flex-direction: row;justify-content: center;align-self: center;">
+						<image src="../../static/images/icon-settings.png" style="width: 32rpx;height: 32rpx;align-self: center;"></image>
+					</view>
+					
+					<view v-if="!isMe && isFollow" 
+						@click="cancelFollow()"
+						style="margin-right: 20rpx;border-width: 1px;border-color: #FFFFFF;width: 200rpx;height: 66rpx;background-color: #545456;opacity: 0.8;border-radius: 40rpx;display: flex;flex-direction: row;justify-content: center;align-self: center;">
+						<text style="font-size: 13px;color: #FFFFFF;font-weight: 500;align-self: center;">已关注</text>
+					</view>
+					<view v-if="!isMe && !isFollow" 
+						@click="followMe()"
+						style="margin-right: 20rpx;border-width: 1px;border-color: #FFFFFF;width: 200rpx;height: 66rpx;background-color: #ef274d;opacity: 0.8;border-radius: 40rpx;display: flex;flex-direction: row;justify-content: center;align-self: center;">
+						<text style="font-size: 13px;color: #FFFFFF;font-weight: 500;align-self: center;">关注我</text>
+					</view>
+				</view>
+			</view>
+
+			<view class="tab-wrapper">
+				<view style="width: 250rpx;align-self: center;" @click="switchTab(0)">
+					<text class="tab-normal" style="align-self: center;" :class="{'tab-selected': currentTab == 0}">作品</text>
+					<view v-if="currentTab == 0"
+						style="margin-top: 5px;height: 5rpx;width: 250rpx;border-radius: 6rpx;background-color: #ef274d;"></view>
+				</view>
+				<view style="width: 250rpx;align-self: center;" @click="switchTab(1)">
+					<text class="tab-normal" style="align-self: center;" :class="{'tab-selected': currentTab == 1}">私密</text>
+					<view v-if="currentTab == 1"
+						style="margin-top: 5px;height: 5rpx;width: 250rpx;border-radius: 6rpx;background-color: #ef274d;"></view>
+				</view>
+				<view style="width: 250rpx;align-self: center;" @click="switchTab(2)">
+					<text class="tab-normal" style="align-self: center;" :class="{'tab-selected': currentTab == 2}">赞过</text>
+					<view v-if="currentTab == 2"
+						style="margin-top: 5px;height: 5rpx;width: 250rpx;border-radius: 6rpx;background-color: #ef274d;"></view>
+				</view>
+			</view>
+			
+				
+			<view class="vlog-list">
+				<block v-for="(vlog,index) in publicVlogList" :key="index" >
+					<image class="vlog-cover" 
+						style="align-self: center;" 
+						:src="vlog.cover" 
+						@click="goToVlog(vlog.id)"
+						mode="aspectFill"></image>
+				<!-- <image class="vlog-cover" style="align-self: center;" src="/static/vlog/cover2.png" mode="widthFix"></image>-->
+				</block>
+			</view>
+		
+			<view v-if="publicVlogList.length == 0"
+				style="background-color: #000000;width: 750rpx;height: 300rpx;display: flex;flex-direction: row;justify-content: center;position: relative; top: -480rpx;">
+				<text style="color: #FFFFFF;font-size: 14px;margin-top: 200rpx;">~ 空空如也 ~</text>
+			</view>
+					
+			<view v-if="publicVlogList.length > 0" 
+				style="width: 750rpx;display: flex;flex-direction: row;justify-content: center;position: relative; top: -260rpx;">
+				<text style="color: #FFFFFF;font-size: 14px;">- 真爱坤 | 唯有你 -</text>
+			</view>
+		</scroll-view>
+		
+		<view class="header" :style="{marginTop:statusBarHeight+'px'}">
+			<image class="header-right-search"
+					src="../../static/images/icon-back.png"  
+					style="width: 40rpx;height: 40rpx;opacity: 0.8;" @click="back()">
+			<view class="header-center">
+				<view class="header-item" @click="tapFollow(1)">
+					<text class="header-item-title"></text>
+				</view>
+			</view>
+			<image class="header-right-search" 
+					src="../../static/images/icon-search.png"  
+					style="width: 50rpx;height: 50rpx;opacity: 0;">
+		</view>
+	</view>
+</template>
+
+<script>
+	var system = uni.getSystemInfoSync();
+	var app = getApp();
+	export default {
+		data() {
+			return {
+				pageUserInfo: {},
+				userPageId: "",
+				astro: "",
+				animal: "",
+				loginWords: "请登录",
+				
+				// changeBig: false,
+				screenHeight: 0,
+				statusBarHeight: 0,
+				screenHeightUnLogin: 0,
+				
+				currentTab: 0,
+				vlogList: getApp().getDefaultVlogList(),
+				isMe: false,
+				isFollow: false,
+				
+				isAndroid: uni.getSystemInfoSync().platform == "android",
+				
+				publicPage: 0,
+				publicTotalPage: 0,
+				publicVlogList: [],
+				
+				privatePage: 0,
+				privateTotalPage: 0,
+				privateVlogList: [],
+				
+				likedPage: 0,
+				likedTotalPage: 0,
+				likedVlogList: [],
+				listRouteType: "myPublicList",
+			}
+		},
+		onLoad(params) {
+			this.statusBarHeight = system.statusBarHeight;
+			var screenHeight = system.safeArea.bottom + 50;
+			this.screenHeight = screenHeight;
+			var screenHeightUnLogin = system.safeArea.bottom;
+			this.screenHeightUnLogin = screenHeightUnLogin;
+			
+			
+			var me = this;
+			
+			// 从视频页面，点击用户头像传递过来的id
+			var userPageId = params.userPageId;
+			if(app.isStrEmpty(userPageId)) {
+				return;
+			}
+			me.userPageId = userPageId;
+			
+			// 当前用户是否登录的用户信息
+			var myUserInfo = getApp().getUserInfoSession();
+			var myUserId = 0;
+			if (myUserInfo != null) {
+				myUserId = myUserInfo.id;
+			}
+			
+			if (myUserId == userPageId) {
+				me.isMe = true;
+			}
+			
+			var serverUrl = app.globalData.serverUrl;
+			
+			// 查询用户信息
+			uni.request({
+				method: "GET",
+				url: serverUrl + "/user/query?userId=" + userPageId,
+				success(result) {
+					
+					if (result.data.status == 200) {
+						me.pageUserInfo = result.data.data;
+						
+						// 背景图片
+						var userBgImg = me.pageUserInfo.bgImg;
+						if (app.isStrEmpty(me.pageUserInfo.bgImg)) {
+							// userBgImg = "../../static/face/face-arrow-1.png";
+							userBgImg = "../../static/images/defaultBgImg.png";
+						}
+						me.userBgImg = userBgImg;
+						
+						// 根据生日判断星座
+						var birthday = me.pageUserInfo.birthday;
+						var birth = app.dateFormat("YYYY-mm-dd", new Date(birthday));
+						var birthArr = birth.split("-");
+						var year = birthArr[0];
+						var month = birthArr[1];
+						var day = birthArr[2];
+						var astro = app.getAstro(month, day);
+						me.astro = astro;
+						
+						// 根据生日判断生肖
+						var animal = app.getAnimal(year);
+						me.animal = animal;
+						
+						me.switchTab(0);
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: "none",
+							duration: 3000
+						});
+					}
+					
+				}
+			});
+			
+			// 查询用户是否关注博主
+			uni.request({
+				method: "GET",
+				header: {
+					headerUserId: myUserId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + "/fans/queryDoIFollowVloger?myId=" + myUserId + "&vlogerId=" + userPageId,
+				success(result) {
+					
+					if (result.data.status == 200) {
+						me.isFollow = result.data.data;
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: "none",
+							duration: 3000
+						});
+					}
+					
+				}
+			});
+			
+			
+			
+		},
+		onShow() {
+			var me = this;
+		},
+		
+		methods: {
+			switchTab(index) {
+				this.currentTab = index;
+				if(index == 0) {
+					this.publicPage = 0;
+					this.publicTotalPage = 0;
+					this.listRouteType = "myPublicList";
+					this.myPublicList(0);
+				} else if(index == 1) {
+					// this.publicPage = 0;
+					// this.publicTotalPage = 0;
+					// this.listRouteType = "myPrivateList";
+					// this.myPublicList(0);
+					// 别人的页面，私有不显示
+					this.publicVlogList = [];
+				} else if(index == 2) {
+					this.publicPage = 0;
+					this.publicTotalPage = 0;
+					this.listRouteType = "myLikedList";
+					this.myPublicList(0);
+				}
+			},
+			loadMore() {
+				if (this.publicPage >= this.publicTotalPage) {
+					return;
+				} else {
+					this.myPublicList(this.publicPage);
+				}
+			},
+			myPublicList(publicPage) {
+				var me = this;
+				if (publicPage == 0) {
+					me.publicVlogList = [];
+				}
+				publicPage = publicPage + 1;
+				me.publicPage = publicPage;
+				var userId = me.pageUserInfo.id;
+				var serverUrl = app.globalData.serverUrl;
+				var listRouteType = me.listRouteType;
+				// console.log(userId);
+				// console.log(app.getUserSessionToken());
+				uni.request({
+					method: "GET",
+					header: {
+						headerUserId: getApp().getUserInfoSession().id,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/vlog/" + listRouteType + "?userId=" + userId + "&page=" + publicPage + "&pageSize=10",
+					success(result) {
+						if (result.data.status == 200) {
+							var vlogList = result.data.data.rows;
+							// console.log(vlogList)
+							var publicTotalPage = result.data.data.total;
+							me.publicVlogList = me.publicVlogList.concat(vlogList);
+							me.publicPage = publicPage;
+							me.publicTotalPage = publicTotalPage;
+						}
+					}
+				});
+			},
+			back() {
+				uni.navigateBack({
+					delta: 1
+				})
+			},
+			cancelFollow() {
+				var me = this;
+				var vlogerId = me.userPageId;
+				var userId = getApp().getUserInfoSession().id;
+				var serverUrl = app.globalData.serverUrl;
+				uni.request({
+					method: "POST",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/fans/cancel?myId=" + userId + "&vlogerId=" + vlogerId,
+					success(result) {
+						
+						if (result.data.status == 200) {
+							me.isFollow = false;
+							uni.setStorageSync("justCancelVlogerId", vlogerId);
+							
+							// 刷新当前页的粉丝数
+							var pendingInfo = me.pageUserInfo;
+							me.pageUserInfo.myFansCounts = pendingInfo.myFansCounts-1;
+							
+						} else {
+							uni.showToast({
+								title: result.data.msg,
+								icon: "none",
+								duration: 3000
+							});
+						}
+						
+					}
+				});
+				
+			},
+			followMe() {
+				var me = this;
+				var myUserInfo = getApp().getUserInfoSession();
+				if (myUserInfo == null) {
+					uni.showToast({
+						duration: 3000,
+						title: "请登录~",
+						icon: "none"
+					});
+					
+					uni.navigateTo({
+						url: "../loginRegist/loginRegist",
+						animationType: "slide-in-bottom",
+						success() {
+							me.loginWords = "请登录"
+						}
+					});
+					
+					return;
+				}
+				
+				var vlogerId = me.userPageId;
+				var userId = getApp().getUserInfoSession().id;
+				var serverUrl = app.globalData.serverUrl;
+				uni.request({
+					method: "POST",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/fans/follow?myId=" + userId + "&vlogerId=" + vlogerId,
+					success(result) {
+						
+						if (result.data.status == 200) {
+							me.isFollow = true;
+							uni.setStorageSync("justFollowVlogerId", vlogerId);
+							
+							// 刷新当前页的粉丝数
+							var pendingInfo = me.pageUserInfo;
+							me.pageUserInfo.myFansCounts = pendingInfo.myFansCounts+1;
+						} else {
+							uni.showToast({
+								title: result.data.msg,
+								icon: "none",
+								duration: 3000
+							});
+						}
+						
+					}
+				});
+				
+			},
+			
+			goLogin() {
+				uni.navigateTo({
+					url: "../loginRegist/loginRegist",
+					animationType: "slide-in-bottom"
+				})
+			},
+			// 把超过1000或10000的数字调整，比如1.3k/6.8w
+			getGraceNumber(num) {
+				return getApp().graceNumber(num);
+			},
+			
+			goToVlog(vlogId) {
+				// console.log(vlogId);
+				uni.navigateTo({
+					url: "../vlog/vlog?type=mine&isNeedPage=1&vlogId=" + vlogId
+				})
+			},
+			
+			goMyInfo() {
+				uni.navigateTo({
+					animationType: "fade-in",
+					url: "myInfo"
+				})
+			},
+			
+			goSettings() {
+				uni.navigateTo({
+					animationType: "fade-in",
+					url: "settings"
+				})
+			},
+			
+			goMyFans() {
+				uni.navigateTo({
+					animationType: "fade-in",
+					url: "myFans"
+				})
+			},
+			
+			goMyFollows() {
+				uni.navigateTo({
+					animationType: "fade-in",
+					url: "myFollows"
+				})
+			},
+			
+			changeMyBg() {
+				uni.navigateTo({
+					animationType: "fade-in",
+					url: "myBackImg"
+				})
+			},
+			
+			changeMyFace() {
+				uni.navigateTo({
+					animationType: "fade-in",
+					url: "myFace"
+				})
+			},
+		}
+	}
+</script>
+
+

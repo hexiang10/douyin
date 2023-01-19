@@ -1,0 +1,49 @@
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #FFFFFF;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.qrcode-middle-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: -120rpx;
+}
+.qrcode-box {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background-color: #FFFFFF;
+	
+	box-shadow:0 10px 16px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19) !important;
+}
+.user-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: -70rpx;
+}
+.canvas-qrcode-box {
+	margin-top: 50rpx;
+}
+.bg-cover {
+	width: 750rpx;
+}
+.btn-close {
+	/* position: absolute; */
+	/* top: 0;
+	bottom: 0; */
+	width: 50rpx;
+	height: 50rpx;
+	margin-top: 80rpx;
+	margin-left: 20rpx;
+}
+

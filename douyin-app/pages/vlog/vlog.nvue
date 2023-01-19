@@ -1,0 +1,154 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+	
+.header {
+	position: absolute;
+	left: 0;
+	right: 0;
+	flex-direction: row;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: center;
+	padding-left: 40rpx;
+	padding-right: 40rpx;
+}
+
+.header-center {
+	flex: 1;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.header-left,
+.header-right {
+	color: #999;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: flex-start;
+	justify-content: flex-end;
+	font-family: iconfont;
+}
+
+.header-right-search {
+	height: 100rpx;
+	/* align-items: flex-start;
+	justify-content: flex-end; */
+}
+
+.header-item {
+	align-items: center;
+	margin-left: 6rpx;
+	margin-right: 6rpx;
+}
+
+.header-item-title {
+	width: 120rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-refresh-title {
+	width: 300rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-item-line {
+	height: 5rpx;
+	line-height: 8rpx;
+	width: 60rpx;
+	border-radius: 8rpx;
+}
+</style>
+
+<!-- 视频详情页，从[朋友][我][扫码][消息]跳转过来的 -->
+<template>
+	<view class="page">
+		<!-- 这里是状态栏, 每个页面都需要有，目的不让页面覆盖状态栏 -->
+		<!-- <view :style="{height: statusBarHeight + 'px'}"></view> -->
+		<!-- 增加页面跳转过来的参数，根据参数来判断是个人还是朋友，参数可以拓展，页面公用 -->
+		
+		
+		<swiper style="my-swiper" :style="{height: screenHeight + 'px'}">
+			<swiper-item>
+				<video-detail
+					:screenHeight="screenHeight" 
+					:playStatus="playStatus"
+					:vlogId="vlogId"></video-detail>
+			</swiper-item>
+		</swiper>
+		
+		<view class="header" :style="{marginTop:statusBarHeight+'px'}">
+			<image class="header-right-search"
+					src="../../static/images/icon-back.png"  
+					style="width: 40rpx;height: 40rpx;opacity: 0.8;" @click="back()">
+			<view class="header-center">
+				<view class="header-item" @click="tapFollow(1)">
+					<text class="header-item-title"></text>
+				</view>
+			</view>
+			<image class="header-right-search" 
+					src="../../static/images/icon-search.png"  
+					style="width: 50rpx;height: 50rpx;opacity: 0;">
+		</view>
+			
+	</view>
+</template>
+
+<script>
+	var system = uni.getSystemInfoSync();
+	
+	import videoDetail from '@/components/videoDetail.vue';
+	
+	export default {
+		components: {
+			videoDetail
+		},
+		data() {
+			return {
+				vlogId: "",
+				
+				playStatus: true,
+			}
+		},
+		onLoad(option) {
+			this.statusBarHeight = system.statusBarHeight;
+			var screenWidth = system.screenWidth;
+			this.vlogWidth = (screenWidth-10)/2;
+			
+			var screenHeight = system.safeArea.bottom + 50;
+			this.screenHeight = screenHeight;
+			
+			// 获得参数
+			var vlogId = option.vlogId;
+			this.vlogId = vlogId;
+		},
+		onShow() {
+			
+		},
+		onHide() {
+			// TODO 隐藏的时候暂停播放
+		},
+		methods: {
+			back() {
+				uni.navigateBack({
+					delta: 1
+				})
+			}
+		}
+	}
+</script>

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 @Component
 @Slf4j
+@RefreshScope
 public class AuthFilter extends BaseProperties implements GlobalFilter, Ordered {
 
     //排除的链接
@@ -69,7 +71,7 @@ public class AuthFilter extends BaseProperties implements GlobalFilter, Ordered 
         }else {
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("status", ResponseStatusEnum.FAILED.status());
-            responseData.put("msg", "权限不足，请联系管理员");
+            responseData.put("msg", "登录后才能查看哦~");
             responseData.put("success", ResponseStatusEnum.FAILED.success());
             responseData.put("data", null);
             return responseError(response,responseData);

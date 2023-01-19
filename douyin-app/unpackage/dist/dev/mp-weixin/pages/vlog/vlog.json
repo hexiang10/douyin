@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "video-detail": "/components/videoDetail"
+  }
+}

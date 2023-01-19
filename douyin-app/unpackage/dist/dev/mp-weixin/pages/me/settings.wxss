@@ -1,0 +1,86 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+.place-box {
+	background-color: #4a4c52;
+}
+.place-box-touched {
+	background-color: #6d6b6b;
+}
+.right-arrow {
+	width: 32rpx;
+	height: 32rpx;
+	margin-left: 20rpx;
+}
+.logout {
+	background-color: #4a4c52;
+}
+.logout-touched {
+	background-color: #6d6b6b;
+}
+.fengjianyingyue {
+	width: 250rpx;
+	border-width: 1rpx;
+	border-color: #FFFFFF;
+	border-radius: 10rpx;
+}
+.fengjianyingyue-name {
+	width: 200rpx;
+	margin-top: 26rpx;
+	opacity: 0.8;
+}
+.introduce {
+	color: #F1F1F1;
+	font-size: 26rpx;
+	font-weight: 300;
+	width: 440rpx;
+}
+.course {
+	width: 330rpx;
+	border-radius: 5px;
+}
+

@@ -12,6 +12,7 @@ import com.douyin.common.utils.idworker.Sid;
 import com.douyin.framework.domain.user.User;
 import com.douyin.mapper.user.UserMapper;
 import com.douyin.service.user.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import java.util.Date;
  * @since 2023-01-07
  */
 @DubboService
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired
@@ -59,7 +61,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String userId = sid.nextShort();
         user.setId(userId);
         user.setMobile(mobile);
-        user.setImoocNum("DY"+mobile);
+        user.setImoocNum(userId);
         user.setNickname("用户：" + DesensitizationUtil.commonDisplay(mobile));
         user.setFace("https://img-blog.csdnimg.cn/2592a77c1b45499ea109d39d67aa827b.jpeg");
         user.setBgImg("https://img-blog.csdnimg.cn/a29d24a864c94d089c3850c705d44197.png");

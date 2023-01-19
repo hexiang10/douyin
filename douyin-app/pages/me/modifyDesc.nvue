@@ -1,0 +1,153 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.single-line-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+
+	padding: 30rpx;
+	margin-top: 20rpx;
+}
+.description-input {
+	padding: 10px;
+	color: #ffffff;
+	font-size: 16px;
+	width: 680rpx;
+	height: 180px;
+	background-color: #4a4c52;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+}
+.length-cal {
+	width: 680rpx;
+	height: 20px;
+	background-color: #4a4c52;
+	padding-right: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	padding-bottom: 12rpx;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+.length-text {
+	font-size: 12px;
+	font-weight: 400;
+	color: #f1f1f1;
+}
+.tips {
+	font-size: 12px;
+	font-weight: 400;
+	color: #bfbfbf;
+	width: 700rpx;
+}
+</style>
+<template>
+	<view class="page">
+		<!-- <view class="line"></view> -->
+
+		<view class="single-line-box" style="align-self: center;">
+			<textarea class="description-input" type="text" :value="description" :model="description" placeholder="请填入简介~" maxlength="60" @input="typingContent"></textarea>
+
+			<view class="length-cal">
+				<text class="length-text">{{ wordsLength }}/60</text>
+			</view>
+		</view>
+
+		<view class="" style="align-self: center;"><text class="tips">*注：请设置5-60以内的个人简介长度</text></view>
+	</view>
+</template>
+
+<script>
+var app = getApp();
+export default {
+	data() {
+		return {
+			description: getApp().getUserInfoSession().description,
+			// description: "",
+			wordsLength: 0
+		};
+	},
+	onNavigationBarButtonTap() {
+		var description = this.description;
+		if (description.length > 60 || description.length < 5) {
+			uni.showToast({
+				icon: 'none',
+				title: '简介长度为5-60'
+			});
+			return;
+		}
+
+		this.updateDesc();
+	},
+	onShow() {
+		this.wordsLength = this.description.length;
+	},
+	methods: {
+		updateDesc() {
+			var me = this;
+			var userId = getApp().getUserInfoSession().id;
+			var description = this.description;
+
+			var pendingUserInfo = {
+				id: userId,
+				description: description
+			};
+
+			// 修改昵称
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'POST',
+				header: {
+					headerUserId: userId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + '/user/modify?type=6',
+				data: pendingUserInfo,
+				success(result) {
+					if (result.data.status == 200) {
+						var userInfoUpdated = result.data.data;
+						// 重置本地用户信息
+						app.setUserInfoSession(userInfoUpdated);
+
+						uni.navigateBack({
+							delta: 1,
+							animationType: 'fade-out'
+						});
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				}
+			});
+		},
+
+		typingContent(e) {
+			var event = e;
+			this.description = e.detail.value;
+			this.wordsLength = this.description.length;
+		}
+	}
+};
+</script>

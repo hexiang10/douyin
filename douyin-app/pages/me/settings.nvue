@@ -1,0 +1,165 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.place-box {
+	background-color: #4a4c52;
+}
+.place-box-touched {
+	background-color: #6d6b6b;
+}
+
+.right-arrow {
+	width: 32rpx;
+	height: 32rpx;
+	margin-left: 20rpx;
+}
+
+.logout {
+	background-color: #4a4c52;
+}
+.logout-touched {
+	background-color: #6d6b6b;
+}
+.fengjianyingyue {
+	width: 250rpx;
+	border-width: 1rpx;
+	border-color: #ffffff;
+	border-radius: 10rpx;
+}
+.fengjianyingyue-name {
+	width: 200rpx;
+	margin-top: 26rpx;
+	opacity: 0.8;
+}
+.introduce {
+	color: #f1f1f1;
+	font-size: 26rpx;
+	font-weight: 300;
+	width: 440rpx;
+}
+.course {
+	width: 330rpx;
+	border-radius: 5px;
+}
+.award {
+	color: yellow;
+}
+</style>
+<template>
+	<view class="page">
+		<!-- <view class="line"></view> -->
+
+		<scroll-view scroll-y="true">
+			<view style="display: flex;flex-direction: row;justify-content: space-between;padding: 20rpx;">
+				<view style="display: flex;flex-direction: column;justify-content: center;">
+					<image src="/static/imooc/lee.jpeg" mode="widthFix" class="fengjianyingyue" style="align-self: center;"></image>
+					<!-- <image src="/static/imooc/name.png" mode="widthFix" class="fengjianyingyue-name" style="align-self: center;"></image> -->
+				</view>
+
+				<view>
+					<!-- <text class="introduce">自我介绍：计算机学院软件工程专业何翔</text> -->
+					<text class="introduce">
+						自我评价：本人阳光开朗、勤奋刻苦，具有进取心、责任感、团队合作精神。三年学生干部的锻炼让我拥有了出色的沟通、协调能力，优秀的组织和管理能力以及细心热情的工作态度。工作中如果遇到不会的问题会第一时间去学习掌握，不断地学习相关技术，同时也会通过查阅相关文献资料或根据官方文档学习等方式来增强自己对不懂的那些技术的认识和了解，以此更好地将所学知识运用到项目实践当中。
+					</text>
+				</view>
+			</view>
+			<view style="display: flex;flex-direction: row;justify-content: center;margin-top: 20rpx;"><text class="award">获奖经历</text></view>
+			<view style="display: flex;flex-direction: row;justify-content: center;margin-top: 20rpx;"><text class="award">🥇🥇🥇</text></view>
+			<view style="display: flex;flex-direction: row;justify-content: center;margin-top: 20rpx;">
+				<image src="/static/imooc/course-javaarchitect.png" mode="widthFix" class="course" style="width: 380rpx;"></image>
+			</view>
+
+			<view style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 20rpx;padding-left: 30rpx;padding-right: 30rpx;">
+				<image src="/static/imooc/course-pm.png" mode="widthFix" class="course" style=""></image>
+				<image src="/static/imooc/course-springcloud.png" mode="widthFix" class="course" style=""></image>
+			</view>
+
+			<view style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 20rpx;padding-left: 30rpx;padding-right: 30rpx;">
+				<image src="/static/imooc/course-award.png" mode="widthFix" class="course" style=""></image>
+				<image src="/static/imooc/course-perform.png" mode="widthFix" class="course" style=""></image>
+			</view>
+
+			<view style="display: flex;flex-direction: row;justify-content: space-between;margin-top: 20rpx;padding-left: 30rpx;padding-right: 30rpx;">
+				<image src="/static/imooc/course-netty.png" mode="widthFix" class="course" style=""></image>
+				<image src="/static/imooc/course-zookeeper.png" mode="widthFix" class="course" style=""></image>
+			</view>
+
+			<!-- <view style="display: flex;flex-direction: row;justify-content: center;margin-top: 20rpx;">
+				<image src="/static/imooc/lee-qrcode.png" mode="widthFix" class="course" style="width: 380rpx;"></image>
+			</view> -->
+
+			<view
+				:class="{ logout: !logoutTouched, 'logout-touched': logoutTouched }"
+				@touchstart="touchstartLogout()"
+				@touchend="touchendLogout()"
+				@click="logout()"
+				style="margin-top: 20rpx;padding-left: 30rpx;padding-right: 30rpx;width: 750rpx;height: 120rpx;display: flex;flex-direction: row;justify-content: center;"
+			>
+				<text style="color: #FFFFFF;align-self: center;font-size: 15px;">退出登录</text>
+			</view>
+		</scroll-view>
+	</view>
+</template>
+
+<script>
+var app = getApp();
+export default {
+	components: {},
+	data() {
+		return {
+			logoutTouched: false
+		};
+	},
+	onLoad() {},
+	methods: {
+		touchstartLogout() {
+			this.logoutTouched = true;
+		},
+		touchendLogout() {
+			this.logoutTouched = false;
+		},
+		logout() {
+			var me = this;
+			var userId = getApp().getUserInfoSession().id;
+
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'POST',
+				url: serverUrl + '/passport/logout?userId=' + userId,
+				success(result) {
+					var status = result.data.status;
+					if (status == 200) {
+						getApp().clearUserInfo();
+						// 在登录登出后，都需要重新刷新首页list，目的为了刷新关注点赞状态
+						// uni.setStorageSync("needRefreshIndexVlogList", "1");
+						// uni.switchTab({
+						// 	url: "../index/index"
+						// })
+						uni.reLaunch({
+							url: '../index/index'
+						});
+					} else if (status != 200) {
+						uni.showToast({
+							title: result.data.msg,
+							icon: 'none'
+						});
+					}
+				}
+			});
+		}
+	}
+};
+</script>

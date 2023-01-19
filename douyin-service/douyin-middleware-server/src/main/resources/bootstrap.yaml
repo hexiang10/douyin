@@ -25,7 +25,3 @@ spring:
           - dataId: datasource.yaml
             group: dev
             refresh: true
-# 消费服务
-dubbo:
-  cloud:
-    subscribed-services: douyin-middleware-server

@@ -1,0 +1,311 @@
+<style>
+/* .status_bar {
+	height: var(--status-bar-height);
+	width: 100%;
+} */
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.user-face {
+	width: 120rpx;
+	height: 120rpx;
+	border-radius: 100rpx;
+	border-width: 1px;
+	border-color: #f1f1f1;
+}
+
+.msg-item-box {
+	display: flex;
+	flex-direction: column;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 30rpx;
+	margin-top: 10rpx;
+}
+.msg-item-left {
+	display: flex;
+	flex-direction: column;
+	flex-direction: row;
+}
+.msg-item-middle {
+	display: flex;
+	flex-direction: column;
+	margin-left: 30rpx;
+	padding-top: 20rpx;
+}
+.user-nickname {
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: 600;
+}
+.msg-content {
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: 300;
+	margin-top: 2rpx;
+}
+.msg-item-right {
+	width: 160rpx;
+	height: 70rpx;
+	opacity: 0.8;
+	border-radius: 8rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+.op-fans-btn {
+	font-size: 13px;
+	color: #ffffff;
+	font-weight: 500;
+}
+.vlog-cover {
+	width: 100rpx;
+	height: 120rpx;
+	margin-right: 10rpx;
+	border-radius: 2px;
+}
+</style>
+<template>
+	<view class="page">
+		<!-- <view class="status_bar"> -->
+		<!-- 这里是状态栏, 每个页面都需要有，目的不让页面覆盖状态栏 -->
+		<!-- </view> -->
+		<view class="line"></view>
+
+		<scroll-view scroll-y="true" @scrolltolower="loadMore">
+			<block v-for="(msg, index) in msgList" :key="index">
+				<!-- 粉丝关注 -->
+				<view v-if="msg.msgType == 1" class="msg-item-box">
+					<view class="msg-item-left">
+						<image mode="scaleToFill" class="user-face" :src="msg.fromFace" style="align-self: center;"></image>
+
+						<view class="msg-item-middle">
+							<text class="user-nickname">{{ msg.fromNickname }}</text>
+							<text class="msg-content">关注了你 {{ getGraceDateBeforeNow(msg.createTime) }}</text>
+						</view>
+					</view>
+
+					<!-- 自己是否关注这个粉丝要加判断 -->
+					<view v-if="!msg.msgContent.isFriend" class="msg-item-right" style="background-color: #ef274d;align-self: center;" @click="followMe(msg.id, msg.fromUserId)">
+						<text class="op-fans-btn" style="align-self: center;">回粉</text>
+					</view>
+					<view v-if="msg.msgContent.isFriend" class="msg-item-right" style="background-color: #545456;align-self: center;" @click="cancelFollow(msg.id, msg.fromUserId)">
+						<text class="op-fans-btn" style="align-self: center;">互关</text>
+					</view>
+				</view>
+
+				<!-- 点赞视频 -->
+				<view v-if="msg.msgType == 2" class="msg-item-box">
+					<view class="msg-item-left">
+						<image mode="scaleToFill" class="user-face" :src="msg.fromFace" style="align-self: center;"></image>
+
+						<view class="msg-item-middle">
+							<text class="user-nickname">{{ msg.fromNickname }}</text>
+							<text class="msg-content">点赞了你的视频 {{ getGraceDateBeforeNow(msg.createTime) }}</text>
+						</view>
+					</view>
+					<image mode="aspectFill" class="vlog-cover" style="align-self: center;" :src="msg.msgContent.vlogCover" @click="goToVlog(msg.msgContent.vlogId)"></image>
+				</view>
+
+				<!-- 评论视频 -->
+				<view v-if="msg.msgType == 3" class="msg-item-box">
+					<view class="msg-item-left">
+						<image mode="scaleToFill" class="user-face" :src="msg.fromFace" style="align-self: center;"></image>
+
+						<view class="msg-item-middle">
+							<text class="user-nickname">{{ msg.fromNickname }}</text>
+							<text class="msg-content" style="font-weight: 400;width: 360rpx;lines: 2;text-overflow: ellipsis;">{{ msg.msgContent.commentContent }}</text>
+							<text class="msg-content" style="font-weight: 200;">发表了评论 {{ getGraceDateBeforeNow(msg.createTime) }}</text>
+						</view>
+					</view>
+
+					<image mode="aspectFill" class="vlog-cover" style="align-self: center;" :src="msg.msgContent.vlogCover" @click="goToVlog(msg.msgContent.vlogId)"></image>
+				</view>
+
+				<!-- 回复评论 -->
+				<view v-if="msg.msgType == 4" class="msg-item-box">
+					<view class="msg-item-left">
+						<image mode="scaleToFill" class="user-face" :src="msg.fromFace" style="align-self: center;"></image>
+
+						<view class="msg-item-middle">
+							<text class="user-nickname">{{ msg.fromNickname }}</text>
+							<text class="msg-content" style="font-weight: 400;width: 360rpx;lines: 2;text-overflow: ellipsis;">{{ msg.msgContent.commentContent }}</text>
+							<text class="msg-content" style="font-weight: 200;">回复了你 {{ getGraceDateBeforeNow(msg.createTime) }}</text>
+						</view>
+					</view>
+
+					<image mode="aspectFill" class="vlog-cover" style="align-self: center;" :src="msg.msgContent.vlogCover" @click="goToVlog(msg.msgContent.vlogId)"></image>
+				</view>
+
+				<!-- 点赞评论 -->
+				<view v-if="msg.msgType == 5" class="msg-item-box">
+					<view class="msg-item-left">
+						<image mode="scaleToFill" class="user-face" :src="msg.fromFace" style="align-self: center;"></image>
+
+						<view class="msg-item-middle">
+							<text class="user-nickname">{{ msg.fromNickname }}</text>
+							<text class="msg-content">点赞了你的评论 {{ getGraceDateBeforeNow(msg.createTime) }}</text>
+						</view>
+					</view>
+
+					<image mode="aspectFill" class="vlog-cover" style="align-self: center;" :src="msg.msgContent.vlogCover" @click="goToVlog(msg.msgContent.vlogId)"></image>
+				</view>
+			</block>
+		</scroll-view>
+	</view>
+</template>
+
+<script>
+var app = getApp();
+export default {
+	data() {
+		return {
+			msgList: [],
+			page: 0,
+			totalPage: 0
+		};
+	},
+	onShow() {
+		this.page = 0;
+		this.totalPage = 0;
+		this.msgList = [];
+
+		this.fetchList(0);
+	},
+	methods: {
+		goToVlog(vlogId) {
+			uni.navigateTo({
+				url: '../vlog/vlog?vlogId=' + vlogId
+			});
+		},
+		// 关注/取关后的list重新状态刷新设置
+		reFreshList(msgId, vlogerId, status) {
+			var me = this;
+			var msgList = me.msgList;
+			for (var i = 0; i < msgList.length; i++) {
+				var msg = msgList[i];
+				if (msg.id == msgId) {
+					var msgContent = msg.msgContent;
+					msgContent.isFriend = status;
+					msgList.splice(i, 1, msg);
+				}
+			}
+			me.msgList = msgList;
+		},
+		cancelFollow(msgId, vlogerId) {
+			var me = this;
+			var userId = getApp().getUserInfoSession().id;
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'POST',
+				header: {
+					headerUserId: userId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + '/fans/cancel?myId=' + userId + '&vlogerId=' + vlogerId,
+				success(result) {
+					if (result.data.status == 200) {
+						me.reFreshList(msgId, vlogerId, false);
+						uni.setStorageSync('justCancelVlogerId', vlogerId);
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				}
+			});
+		},
+		followMe(msgId, vlogerId) {
+			var me = this;
+			var userId = getApp().getUserInfoSession().id;
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'POST',
+				header: {
+					headerUserId: userId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + '/fans/follow?myId=' + userId + '&vlogerId=' + vlogerId,
+				success(result) {
+					if (result.data.status == 200) {
+						me.reFreshList(msgId, vlogerId, true);
+						uni.setStorageSync('justFollowVlogerId', vlogerId);
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				}
+			});
+		},
+
+		loadMore() {
+			var pendginPage = this.page + 1;
+			this.fetchList(pendginPage);
+		},
+		fetchList(page) {
+			var me = this;
+
+			var myUserInfo = app.getUserInfoSession();
+			if (myUserInfo == null) {
+				uni.showToast({
+					duration: 1500,
+					title: '请登录~',
+					icon: 'none'
+				});
+				// uni.navigateTo({
+				// 	url: "../loginRegist/loginRegist",
+				// 	animationType: "slide-in-bottom",
+				// 	success() {
+				// 		me.loginWords = "请登录"
+				// 	}
+				// });
+				return;
+			}
+
+			var userId = getApp().getUserInfoSession().id;
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'GET',
+				header: {
+					headerUserId: userId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + '/msg/list?userId=' + userId + '&page=' + page + '&pageSize=10',
+				success(result) {
+					if (result.data.status == 200) {
+						var msgList = result.data.data;
+						console.log(msgList);
+						if (msgList != null && msgList != undefined && msgList.length > 0) {
+							me.msgList = me.msgList.concat(msgList);
+							me.page = page;
+						}
+					}
+				}
+			});
+		},
+		// 时间显示 刚刚/xx小时前/...
+		getGraceDateBeforeNow(dateTimeStr) {
+			var date = app.dateFormat('YYYY-mm-dd', new Date(dateTimeStr));
+			return getApp().getDateBeforeNow(date);
+		}
+	}
+};
+</script>

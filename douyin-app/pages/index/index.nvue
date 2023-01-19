@@ -1,0 +1,335 @@
+<style scoped>
+	/* index start */
+	.page {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-color: #000000;
+	}
+	/* index end */
+	
+	/* 顶部选项卡 start */
+	.header {
+		position: absolute;
+		left: 0;
+		right: 0;
+		flex-direction: row;
+		height: 100rpx;
+		line-height: 100rpx;
+		align-items: center;
+		padding-left: 40rpx;
+		padding-right: 40rpx;
+	}
+	
+	.header-center {
+		flex: 1;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.header-left,
+	.header-right {
+		color: #999;
+		height: 100rpx;
+		line-height: 100rpx;
+		align-items: flex-start;
+		justify-content: flex-end;
+		font-family: iconfont;
+	}
+	
+	.header-right-search {
+		height: 100rpx;
+		/* align-items: flex-start;
+		justify-content: flex-end; */
+	}
+	
+	.header-item {
+		align-items: center;
+		margin-left: 6rpx;
+		margin-right: 6rpx;
+	}
+	
+	.header-item-title {
+		width: 120rpx;
+		text-align: center;
+		height: 60rpx;
+		line-height: 60rpx;
+		color: #FFFFFF;
+		font-size: 16px;
+		font-weight: 600;
+	}
+	.header-refresh-title {
+		width: 300rpx;
+		text-align: center;
+		height: 60rpx;
+		line-height: 60rpx;
+		color: #FFFFFF;
+		font-size: 16px;
+		font-weight: 600;
+	}
+	.header-item-line {
+		height: 5rpx;
+		line-height: 8rpx;
+		width: 60rpx;
+		border-radius: 8rpx;
+	}
+	/* 顶部选项卡 end */
+	
+	/* 选项卡轮播组件 start */
+	.my-swiper {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+	}
+	.near-by {
+		background-color: #000000;
+		align-items: center;
+		justify-content: center;
+	}
+	.my-follow {
+		background-color: #000000;
+		align-items: center;
+		justify-content: center;
+	}
+	/* 选项卡轮播组件 end */
+	.warn-info {
+		color: #FFFFFF;
+		font-size: 36rpx;
+		font-weight: 600;
+	}
+	.normal-img {
+		width: 50rpx;
+		height: 50rpx;
+		opacity: 0.8;
+	}
+</style>
+<template>
+	<view class="page">
+		<!-- 左中右的三个页面切换，依次是：附近 - 关注 - 推荐 -->
+		<swiper style="my-swiper" :style="{height: screenHeight + 'px'}" :current="curIndex" @change="changeTopTab">
+			<swiper-item>
+				<view class="near-by" :style="{height: screenHeight+'px'}">
+					<text class="warn-info">暂未开放，敬请期待！</text>
+				</view>
+			</swiper-item>
+			<swiper-item>
+				<view v-if="myUserInfo == null" class="my-follow" :style="{height: screenHeight+'px'}">
+					<text class="warn-info">请登录后查看！</text>
+				</view>
+					<video-follow-comp
+						ref="videoFollowComp"
+						:screenHeight="screenHeight" 
+						:playFollowStatus="playFollowStatus" 
+						:videoList="videoList"
+						:refreshList="refreshList"
+						:pagingList="pagingList"
+						@showLoading="showLoading"
+						@hideLoading="hideLoading"
+						@letFollowVideoPause="letFollowVideoPause"
+						@displayVideoPaging="displayVideoPaging"></video-follow-comp>
+			</swiper-item>
+			<swiper-item>
+					<video-comp
+						ref="videoComp"
+						:screenHeight="screenHeight" 
+						:playStatus="playStatus" 
+						:videoList="videoList"
+						:refreshList="refreshList"
+						:pagingList="pagingList"
+						@showLoading="showLoading"
+						@hideLoading="hideLoading"
+						@displayVideoPaging="displayVideoPaging"></video-comp>
+			</swiper-item>
+		</swiper>
+		
+		<view class="header" :style="{marginTop:statusBarHeight+'px'}" v-if="!isLoading">
+			<text class="header-left"></text>
+			<view class="header-center">
+				<view class="header-item" @click="tapFollow(0)">
+					<text class="header-item-title">附近</text>
+					<view class="header-item-line" :class="{'activate-line': curIndex === 0}"></view>
+				</view>
+				<view class="header-item" @click="tapFollow(1)">
+					<text class="header-item-title">关注</text>
+					<view class="header-item-line" :class="{'activate-line': curIndex === 1}"></view>
+				</view>
+				<view class="header-item" @click="tapFollow(2)">
+					<text class="header-item-title">推荐</text>
+					<view class="header-item-line" :class="{'activate-line': curIndex === 2}"></view>
+				</view>
+			</view>
+			<image class="header-right-search normal-img" src="../../static/images/icon-search.png" @click="goSearch">
+		</view>
+		
+		<view class="header" :style="{marginTop:statusBarHeight+'px'}" v-if="isLoading">
+			<text class="header-left"></text>
+			<view class="header-center">
+				<view class="header-item">
+					<text class="header-refresh-title">下拉刷新视频</text>
+				</view>
+			</view>
+			<image class="header-right-search normal-img" src="../../static/images/loading.gif">
+		</view>
+		<!-- 顶部切换的导航 end -->
+		
+	</view>
+</template>
+<script>
+	var system = uni.getSystemInfoSync();
+	var app = getApp();
+	// import uniHeader from '@/components/header';
+	// import uniFooter from '@/components/footer';
+	// import uniSwiper from '@/components/swiper';
+	import videoComp from '@/components/videoComp.vue';
+	import videoFollowComp from '@/components/videoFollowComp.vue';
+	export default {
+		components: {
+			// uniHeader,
+			// uniFooter,
+			// uniSwiper,
+			videoComp,
+			videoFollowComp
+		},
+		data() {
+			return {
+				isLoading: false,
+				
+				statusBarHeight: system.statusBarHeight,
+				screenHeight: system.screenHeight,
+				// screenHeight: system.safeArea.bottom,// - 50,
+				curIndex: 2,
+				playStatus: false,
+				playFollowStatus: false,
+				
+				// videoList: getApp().getDefaultVlogList(),			// 首页一开始查询所得的默认视频列表
+				videoList: [],			// 首页一开始查询所得的默认视频列表
+				refreshList: [],			// 下拉刷新后获得的新的列表
+				pagingList: [],				// 分页list
+				refresh: 0,					// 从me页面传来的refresh，用于退出登录后重新刷新当前页的视频
+				
+			}
+		},
+		onLoad() {
+			var have = plus.navigator.hasNotchInScreen();	// 判断是否有下巴
+		},
+		onTabItemTap : function(e) {
+			var tabIndex = e.index;
+			// this.playStatus = tabIndex === 0 ? true : false;
+			
+			// 切换视频要做暂停或播放的判断
+			var me = this;
+			if (tabIndex == 0) {
+				// 虚位以待
+			} else if (tabIndex == 1) {
+				me.playStatus = false;
+				me.playFollowStatus = true;
+			} else if (tabIndex == 2) {
+				me.playStatus = true;
+				me.playFollowStatus = false;
+			}
+		},
+		onShow() {
+			var me = this;
+			
+			var myUserInfo = app.getUserInfoSession();
+			this.myUserInfo = myUserInfo;
+			
+			
+			// 如果当前没有list，则relaunch
+			if (this.$refs.videoComp != undefined) {
+				var playerList = this.$refs.videoComp.playerList;
+				if (playerList != undefined && playerList.length == 0) {
+					this.$refs.videoComp.displayVideoPaging(1, true);
+				}
+			}
+			
+			
+			// 判断如果当前是tab为1或2，则播放，否则不播放
+			if (me.curIndex == 0) {
+				// 虚位以待
+			} else if (me.curIndex == 1) {
+				me.playFollowStatus = true;
+			} else if (me.curIndex == 2) {
+				me.playStatus = true;
+			}
+			
+			// onShow的时候，关注的话，则重新刷一下list
+			var justFollowVlogerId = uni.getStorageSync("justFollowVlogerId");
+			if (!app.isStrEmpty(justFollowVlogerId)) {
+				this.$refs.videoComp.reFollowPlayList(justFollowVlogerId);
+				uni.setStorageSync("justFollowVlogerId", "");
+			}
+			// 取消关注也要重新刷一下list
+			var justCancelVlogerId = uni.getStorageSync("justCancelVlogerId");
+			if (!app.isStrEmpty(justCancelVlogerId)) {
+				this.$refs.videoComp.reCancelPlayList(justCancelVlogerId);
+				uni.setStorageSync("justCancelVlogerId", "");
+			}
+			
+		},
+		onHide() {
+			var me = this;
+			// 显示和隐藏，需要判断根据不同tab做暂停或者隐藏
+			if (me.curIndex == 0) {
+				// 虚位以待
+			} else if (me.curIndex == 1) {
+				me.playFollowStatus = false;
+			} else if (me.curIndex == 2) {
+				me.playStatus = false;
+			}
+		},
+		// 当前页下拉刷新
+		onPullDownRefresh() {
+			var me = this;
+			
+			// 下拉刷新判断，如果是不同tab，那么组件中刷新的请求也不同
+			if (me.curIndex == 0) {
+				// 虚位以待
+			} else if (me.curIndex == 1) {
+				this.$refs.videoFollowComp.displayVideoPaging(1, true);
+			} else if (me.curIndex == 2) {
+				this.$refs.videoComp.displayVideoPaging(1, true);
+			}
+			
+		},
+		methods: {
+			// 前往搜索页面
+			goSearch() {
+				uni.navigateTo({
+					url: "/pages/search/search"
+				})
+			},
+			
+			// 左滑右滑选项卡改变选中状态
+			changeTopTab: function(e) {
+				var current = e.detail.current;
+				this.curIndex = current;
+				this.playFollowStatus = this.curIndex === 1 ? true : false;
+				this.playStatus = this.curIndex === 2 ? true : false;
+			},
+			// 点击头部选项卡，切换页面
+			tapFollow: function(current) {
+				// console.log(current)
+				this.curIndex = current;
+				this.playFollowStatus = this.curIndex === 1 ? true : false;
+				this.playStatus = this.curIndex === 2 ? true : false;
+			},
+			
+			// 下拉刷新，改变head的字样显示
+			showLoading() {
+				this.isLoading = true;
+			},
+			hideLoading() {
+				this.isLoading = false;
+			},
+			letFollowVideoPause() {
+				this.playFollowStatus = false;
+			}
+		}
+	}
+</script>

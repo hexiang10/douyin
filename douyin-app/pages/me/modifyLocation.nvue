@@ -1,0 +1,162 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.place-box {
+	background-color: #4a4c52;
+}
+.place-box-touched {
+	background-color: #6d6b6b;
+}
+
+.right-arrow {
+	width: 32rpx;
+	height: 32rpx;
+	margin-left: 20rpx;
+}
+
+.tips {
+	font-size: 12px;
+	font-weight: 400;
+	color: #bfbfbf;
+	width: 700rpx;
+	margin-top: 20rpx;
+}
+</style>
+<template>
+	<view class="page">
+		<!-- <view class="line"></view> -->
+
+		<view
+			:class="{ 'place-box': !placeTouched, 'place-box-touched': placeTouched }"
+			@click="chooseLocation()"
+			@touchstart="touchstartLocation"
+			@touchend="touchendLocation"
+			style="margin-top: 60rpx;padding-left: 30rpx;padding-right: 30rpx;width: 750rpx;height: 120rpx;display: flex;flex-direction: row;justify-content: space-between;"
+		>
+			<text style="color: #FFFFFF;align-self: center;font-size: 15px;">中国</text>
+
+			<view class="" style="display: flex;flex-direction: row;justify-content: flex-start;align-self: center;">
+				<text style="color: #FFFFFF;font-size: 15px;">{{ areaText }}</text>
+				<image class="right-arrow" style="align-self: center;" src="/static/images/icon-right-arrow2.png"></image>
+			</view>
+		</view>
+
+		<view class="" style="align-self: center;"><text class="tips">*注：点击即可选择省份与城市~</text></view>
+	</view>
+</template>
+
+<script>
+var app = getApp();
+export default {
+	components: {},
+	data() {
+		return {
+			areaText: '选择地区',
+			areaName: '',
+			placeTouched: false,
+			chooseLocationDone: false // 是否选择所在地流程完结
+		};
+	},
+	onNavigationBarButtonTap() {
+		var areaName = uni.getStorageSync('myLocationArea');
+		if (getApp().isStrEmpty(areaName)) {
+			uni.showToast({
+				icon: 'none',
+				title: '请选择一个地区'
+			});
+			return;
+		}
+
+		this.updateLocation();
+	},
+	onLoad() {},
+	onShow() {
+		var provinceName = uni.getStorageSync('myLocationProvince');
+		var areaName = uni.getStorageSync('myLocationArea');
+		if (getApp().isStrEmpty(areaName)) {
+			this.areaText = '选择地区';
+		} else {
+			this.areaText = provinceName + '·' + areaName;
+		}
+	},
+	methods: {
+		updateLocation() {
+			var country = '中国';
+			var provinceName = uni.getStorageSync('myLocationProvince');
+			var areaName = uni.getStorageSync('myLocationArea');
+
+			var me = this;
+			var userId = getApp().getUserInfoSession().id;
+			var nickname = this.nickname;
+
+			var pendingUserInfo = {
+				id: userId,
+				country: country,
+				province: provinceName,
+				city: areaName
+			};
+
+			// 修改昵称
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'POST',
+				header: {
+					headerUserId: userId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + '/user/modify?type=5',
+				data: pendingUserInfo,
+				success(result) {
+					if (result.data.status == 200) {
+						var userInfoUpdated = result.data.data;
+						// 重置本地用户信息
+						app.setUserInfoSession(userInfoUpdated);
+
+						uni.navigateBack({
+							delta: 1,
+							animationType: 'fade-out'
+						});
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				},
+				complete() {
+					// 不管是否更新成功，都需要重置
+					uni.setStorageSync('myLocationCountry', '');
+					uni.setStorageSync('myLocationProvince', '');
+					uni.setStorageSync('myLocationArea', '');
+				}
+			});
+		},
+		touchstartLocation() {
+			this.placeTouched = true;
+		},
+		touchendLocation() {
+			this.placeTouched = false;
+		},
+		chooseLocation() {
+			uni.setStorageSync('myLocationCountry', '中国');
+			uni.navigateTo({
+				url: 'chooseProvince'
+			});
+		}
+	}
+};
+</script>

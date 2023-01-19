@@ -1,0 +1,430 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+	
+.header {
+	position: absolute;
+	left: 0;
+	right: 0;
+	flex-direction: row;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: center;
+	padding-left: 40rpx;
+	padding-right: 40rpx;
+}
+
+.header-center {
+	flex: 1;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.header-left,
+.header-right {
+	color: #999;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: flex-start;
+	justify-content: flex-end;
+	font-family: iconfont;
+}
+
+.header-right-search {
+	height: 100rpx;
+	/* align-items: flex-start;
+	justify-content: flex-end; */
+}
+
+.header-item {
+	align-items: center;
+	margin-left: 6rpx;
+	margin-right: 6rpx;
+}
+
+.header-item-title {
+	width: 200rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 18px;
+	font-weight: 400;
+}
+.header-refresh-title {
+	width: 300rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-item-line {
+	height: 5rpx;
+	line-height: 8rpx;
+	width: 60rpx;
+	border-radius: 8rpx;
+}
+
+.preplay-wrapper {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin-top: -90rpx;
+	margin-left: 30rpx;
+	border-width: 1px;
+	/* border-color: #343438; */
+	/* background-color: #0c0c0c; */
+	padding: 6rpx 16rpx;
+	width: 200rpx;
+	border-radius: 20rpx;
+}
+
+.vlog-content {
+	margin-top: 30rpx;
+	height: 100px;
+	color: #FFFFFF;
+	font-size: 16px;
+	background-color: #0c0c0c;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	border-radius: 10px;
+}
+
+.btn-preplay {
+	background-color: #0c0c0c;
+	border-color: #343438;
+}
+.btn-preplay-touched {
+	background-color: #545456;
+	border-color: #000000;
+}
+
+.btn-publish {
+	background-color: #ef274d;
+}
+.btn-publish-touched {
+	background-color: #de6981;
+}
+
+.choose-cover {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 360rpx;
+	background-color: #000000;
+	opacity: 0.3;
+	height: 50px;
+	margin-left: 30rpx;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	position: relative;
+	top: -50px;
+}
+</style>
+
+<template>
+	<view class="page">
+		<!-- 这里是状态栏, 每个页面都需要有，目的不让页面覆盖状态栏 -->
+		<!-- <view :style="{height: statusBarHeight + 'px'}"></view>
+		<view class="header" :style="{marginTop:statusBarHeight+'px'}">
+			<image class="header-right-search"
+					src="../../static/images/icon-back.png"  
+					style="width: 40rpx;height: 40rpx;opacity: 0.8;" @click="back()"/>			
+			<view class="header-center">
+				<view class="header-item">
+					<text class="header-item-title">发布视频</text>
+				</view>
+			</view>
+			<image class="header-right-search" 
+					src="../../static/images/icon-search.png"  
+					style="width: 50rpx;height: 50rpx;opacity: 0.8;">
+		</view> -->
+		
+		<!-- 进度条 -->
+		<view 
+			style="marginTop:60rpx;display: flex;flex-direction: column;justify-content: center;" 
+			v-if="percentCompleted != 100">
+			<progress 
+				:percent="percentCompleted" 
+				stroke-width="3" 
+				activeColor="#ef274d"
+				backgroundColor="#F1F1F1"
+				:style="{screenWidth: screenWidth + 'px'}"
+				/>
+			<text 
+				style="color: #F1F1F1;font-size: 16px;text-align: center;margin-top: 20px;" 
+				:style="{screenWidth: screenWidth + 'px'}">视频上传中~ 请耐心等待~~</text>
+			<image mode="aspectFit"
+				src="../../static/images/loading-4.gif"  
+				style="width: 600rpx;height: 600rpx;align-self: center;">
+		</view>
+		
+		
+		<!-- 发布主体内容 -->
+		<view v-if="percentCompleted == 100">
+			<image :src="tempCover" mode="aspectFit"
+				style="marginTop: 30px;width: 360rpx;height: 500rpx;border-radius: 10px;margin-left: 30rpx;margin-top: 10px;"></image>
+			
+			<view class="choose-cover" @click="chooseCover">
+				<text style="color: #ffffff;font-size: 14px;align-self: center;">选择封面</text>
+			</view>
+			
+			<view class="preplay-wrapper" 
+				:class="{'btn-preplay':!preplayTouched, 'btn-preplay-touched': preplayTouched}"
+				@click="preview"
+				@touchstart="touchstartPreplay" 
+				@touchend="touchendPreplay">
+				<image src="../../static/images/btn-play.png" 
+					style="width: 22rpx;height: 22rpx;align-self: center;"></image>
+				<text style="color: #e6e6e6;font-size: 14px;align-self: center;margin-left: 10rpx;">预览视频</text>
+			</view>
+			
+			<!-- :style="{screenWidth: screenWidth - 150 + 'px'}" -->
+			<textarea 
+				class="vlog-content" 
+				placeholder-style="color: #9798a0;" 
+				placeholder="添加合适的标题内容" 
+				:value="title"
+				:model="title" 
+				maxlength="60"
+				@input="typingContent"
+				confirm-type="done"></textarea>
+			
+			<!-- <view :style="{screenWidth: screenWidth + 'px'}" style="height: 1rpx;background-color: #383a44;margin-top: 20rpx;"></view> -->
+			
+			<view :class="{'btn-publish':!publichTouched, 'btn-publish-touched': publichTouched}" 
+				style="margin-top: 30rpx;height: 90rpx;display: flex;justify-content: center;border-radius: 20px;"
+				@touchstart="touchstartPublich" @touchend="touchendPublich" @click="doPublich">
+				<text style="color: #e6e6e6;font-size: 18px;align-self: center;font-weight: 500;">发布 Vlog</text>
+			</view>
+		</view>
+		
+		
+	</view>
+</template>
+
+<script>
+	var system = uni.getSystemInfoSync();
+	var app = getApp();
+	export default {
+		data() {
+			return {
+				publichTouched: false,
+				preplayTouched: false,
+				tempCover: "/static/face/face-arrow-1.png",
+				tempFilePath: "",
+				videoUrl: "",
+				tempCover: "",
+				title: "",
+				width: 0,
+				height: 0,
+				
+				percentCompleted: 0
+			}
+		},
+		onLoad(params) {
+			var me = this;
+			this.statusBarHeight = system.statusBarHeight;
+			this.screenWidth = system.screenWidth;
+			// 上个页面传过来的文件事件对象，其中包含了相册中选择的视频内容
+			var fileObjectEvent = JSON.parse(params.fileObjectEvent);
+			var times = new Date().getTime();
+			var myUserInfo = getApp().getUserInfoSession();
+			var myUserId = myUserInfo.id;
+			var serverUrl = app.globalData.serverUrl;
+			// 上传视频
+			// uploadFile 存储需要上传的文件
+			let uploadFile = fileObjectEvent.tempFilePath;
+			// console.log(uploadFile);
+			// 上传所选视频到服务器
+			const uploadTask = uni.uploadFile({
+				method: "POST",
+				// 需要上传的地址
+				url: serverUrl + '/upload/video?userId=' + myUserId,
+				// filePath  需要上传的文件
+				filePath: uploadFile,
+				name: 'file',
+				header: {
+					headerUserId: myUserId,
+					headerUserToken: app.getUserSessionToken()
+				},
+			success: (uploadFileRes) => {
+				// console.log(uploadFileRes);
+				var res = JSON.parse(uploadFileRes.data);
+				var f = res.data;
+				var videoUrlTemp = f.videoPath;
+				var videoUrl = f.videoPath;
+				// 获得视频参数
+				me.tempFilePath = videoUrlTemp;
+				me.videoUrl = videoUrl;
+				me.tempCover = f.coverPath;
+				me.width = fileObjectEvent.width;
+				me.height = fileObjectEvent.height;
+			}
+		});
+						
+			uploadTask.onProgressUpdate((res) => {
+				me.percentCompleted = res.progress;
+				// console.log('上传进度' + res.progress);
+				// console.log('已经上传的数据长度' + res.totalBytesSent);
+				// console.log('预期需要上传的数据总长度' + res.totalBytesExpectedToSend);
+				// if (res.progress == 100) {
+				// uploadTask.abort();
+			    // }
+		});
+		    // 方式2：unicloud 上传
+			// uniCloud.uploadFile({
+			// 	filePath: fileObjectEvent.tempFilePath,
+			// 	cloudPath: times + '.mp4',
+			// 	// 获得进度条
+			// 	onUploadProgress(progressEvent) {
+			// 		var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+			// 		me.percentCompleted = percentCompleted;
+			// 	},
+			// 	success(f) {
+			// 		var videoUrlTemp = f.filePath;
+			// 		var videoUrl = f.fileID;
+
+			// 		// 获得视频参数
+			// 		me.tempFilePath = videoUrlTemp;
+			// 		me.videoUrl = videoUrl;
+			// 		me.tempCover = videoUrl + "?x-oss-process=video/snapshot,t_1,f_jpg,ar_auto";	// 截帧
+			// 		me.width = fileObjectEvent.width;
+			// 		me.height = fileObjectEvent.height;
+			// 	}
+			// });
+		},
+		methods: {
+			typingContent(e) {
+				var event = e;
+				this.title = e.detail.value;
+			},
+			doPublich() {
+				var me = this;
+				var userId = getApp().getUserInfoSession().id;
+				
+				var vlog ={
+					"vlogerId": userId,
+					"url": me.videoUrl,
+					"cover": me.tempCover,
+					"title": me.title,
+					"width": me.width,
+					"height": me.height
+				};
+				
+				// 发布视频
+				var serverUrl = app.globalData.serverUrl;
+				uni.request({
+					method: "POST",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/vlog/publish",
+					data: vlog,
+					success(result) {
+						
+						if (result.data.status == 200) {
+							uni.showToast({
+								title: "发布成功！",
+								icon: "none"
+							})
+							
+							uni.navigateBack({
+								delta: 1,
+								animationType: 'zoom-fade-in',
+								animationDuration: 1000
+							});
+							
+							uni.switchTab({
+								url: "../me/me"
+							})
+						} else {
+							uni.showToast({
+								title: result.data.msg,
+								icon: "none",
+								duration: 3000
+							});
+						}
+						
+					}
+				});
+				
+			},
+			
+			preview() {
+				uni.navigateTo({
+					url: "/pages/publish/preview?videoUrl=" + this.videoUrl + "&width=" + this.width + "&height=" + this.height,
+					animationType: 'slide-in-bottom',
+					animationDuration: 500
+				})
+			},
+			
+			touchstartPreplay() {
+				this.preplayTouched = true;
+			},
+			
+			touchendPreplay() {
+				this.preplayTouched = false;
+			},
+			
+			touchstartPublich() {
+				this.publichTouched = true;
+			},
+			
+			touchendPublich() {
+				this.publichTouched = false;
+			},
+			
+			chooseCover() {
+				var me = this;
+				var userId = getApp().getUserInfoSession().id;
+				
+				uni.chooseImage({
+					count: 1,
+					sourceType: ['album'],
+					success(e) {
+						me.tempCover = e.tempFilePaths[0];
+						
+						// 上传封面
+						var serverUrl = app.globalData.serverUrl;
+						uni.uploadFile({
+							url: serverUrl + "/upload/cover?userId=" + userId,
+							name: "file",
+							filePath: me.tempCover,
+							header: {
+								headerUserId: userId,
+								headerUserToken: app.getUserSessionToken()
+							},
+							success(result) {
+								var res = JSON.parse(result.data);
+								if (res.status == 200) {
+									var imageUrl = res.data.coverPath;
+									me.tempCover = imageUrl;
+								} else {
+									uni.showToast({
+										title: result.data.msg,
+										icon: "none",
+										duration: 3000
+									});
+								}
+							}
+						})
+					}
+				})
+			}
+			
+		}
+	}
+</script>

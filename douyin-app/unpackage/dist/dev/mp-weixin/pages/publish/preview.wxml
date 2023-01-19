@@ -1,0 +1,1 @@
+<view class="page" style="background-color:#007AFF;"><video style="{{'width:750rpx;'+('height:'+(screenSafeHeight+'px')+';')}}" src="{{videoUrl}}" autoplay="true" controls="true" object-fit="{{objectFit}}"></video></view>

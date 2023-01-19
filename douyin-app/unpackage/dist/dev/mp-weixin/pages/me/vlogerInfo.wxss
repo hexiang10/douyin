@@ -1,0 +1,195 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+.header {
+	position: absolute;
+	left: 0;
+	right: 0;
+	flex-direction: row;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: center;
+	padding-left: 40rpx;
+	padding-right: 40rpx;
+}
+.header-center {
+	flex: 1;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+.header-left,
+.header-right {
+	color: #999;
+	height: 100rpx;
+	line-height: 100rpx;
+	align-items: flex-start;
+	justify-content: flex-end;
+	font-family: iconfont;
+}
+.header-right-search {
+	height: 100rpx;
+	/* align-items: flex-start;
+	justify-content: flex-end; */
+}
+.header-item {
+	align-items: center;
+	margin-left: 6rpx;
+	margin-right: 6rpx;
+}
+.header-item-title {
+	width: 120rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-refresh-title {
+	width: 300rpx;
+	text-align: center;
+	height: 60rpx;
+	line-height: 60rpx;
+	color: #FFFFFF;
+	font-size: 16px;
+	font-weight: 600;
+}
+.header-item-line {
+	height: 5rpx;
+	line-height: 8rpx;
+	width: 60rpx;
+	border-radius: 8rpx;
+}
+.page-write {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #FFFFFF;
+}
+.constellation {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #000000;
+	opacity: 0.5;
+	width: 130rpx;
+	height: 40rpx;
+	border-radius: 10px;
+}
+.animal {
+	margin-left: 10rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #000000;
+	opacity: 0.5;
+	width: 60rpx;
+	height: 40rpx;
+	border-radius: 10px;
+}
+.tab-wrapper {
+	position: relative; 
+	top: -480rpx;
+	height: 40px;
+	background-color: #171825;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	padding-top: 3px;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+}
+.tab-normal {
+	font-size: 18px;
+	font-weight: 500;
+	/* align-self: center; */
+	color: #808080;
+}
+.tab-unselected {
+	color: #808080;
+}
+.tab-selected {
+	color: #FFFFFF;
+}
+.vlog-list {
+	position: relative; 
+	top: -480rpx;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	background-color: #000000;
+}
+.vlog-cover {
+	width: 248rpx;
+	height: 360rpx;
+	border-width: 1rpx;
+}
+
+
+/* 解决flex布局 space-between最后一行两边分布的问题 */
+
+
+/* .vlog-list:after { 
+    content: ''; 
+    width: 249rpx;   
+}
+.blank-temp {
+    width: 249px;
+	height: 0;
+	border: 1px solid transparent;
+	overflow: hidden;
+} */
+.login-info-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.login-info {
+	color: #FFFFFF;
+	font-size: 36rpx;
+	font-weight: 600;
+}
+

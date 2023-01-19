@@ -3,10 +3,6 @@ server:
 spring:
   application:
     name: douyin-gateway
-  servlet:
-    multipart:
-      max-file-size: 1G
-      max-request-size: 1G
   cloud:
     nacos:
       config:
@@ -24,4 +20,4 @@ spring:
             refresh: true
 
 gateway:
-  excludedUrls: /passport/getSMSCode,/passport/logout,/user/login,/vlog/list,/vlog/detail
+  excludedUrls: /passport/getSMSCode,/passport/logout,/user/login,/user/query,/vlog/list,/vlog/detail,/vlog/totalLikedCounts,/vlog/myPublicList

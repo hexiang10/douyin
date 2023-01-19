@@ -1,0 +1,247 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.place-box {
+	background-color: #4a4c52;
+}
+.place-box-touched {
+	background-color: #6d6b6b;
+}
+
+.right-arrow {
+	width: 32rpx;
+	height: 32rpx;
+	margin-left: 20rpx;
+}
+
+.user-wrapper {
+	padding-left: 30rpx;
+	padding-right: 30rpx;
+	width: 750rpx;
+	height: 120rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin-top: 20rpx;
+	margin-bottom: 20rpx;
+}
+.user-name {
+	color: #FFFFFF;
+	font-size: 15px;
+	margin-left: 20rpx;
+}
+.operator-wrapper {
+	width: 140rpx; 
+	height: 60rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	background-color: #ef274d;
+	border-radius: 10px;
+}
+.operator-words {
+	color: #FFFFFF;
+	font-size: 14px;
+}
+
+.user-info {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+.face {
+	width: 110rpx;
+	height: 110rpx;
+	border-radius: 100rpx;
+	border-width: 1px;
+	border-color: #F1F1F1;
+}
+</style>
+<template>
+	<view class="page">
+		<view class="line"></view>
+			
+		<scroll-view scroll-y="true" @scrolltolower="pagingFollowsList()">
+			
+			<view 
+				class="user-wrapper" 
+				v-for="(f, index) in followsList" 
+				:key="index">
+				<view class="user-info">
+					<image class="face" :src="f.face" style="align-self: center;"></image>
+					<text class="user-name" style="align-self: center;">{{f.nickname}}</text>
+				</view>
+				
+				<view v-if="!f.followed" class="operator-wrapper" style="width: 140rpx; height: 60rpx;display: flex;flex-direction: row;justify-content: center;background-color: #ef274d;border-radius: 10px;align-self: center;">
+					<text class="operator-words" style="align-self: center;color: #FFFFFF;" @click="followMe(f.vlogerId)">关注</text>
+				</view>
+				<view v-if="f.followed" class="operator-wrapper" style="width: 140rpx; height: 60rpx;display: flex;flex-direction: row;justify-content: center;background-color: #ef274d;border-radius: 10px;align-self: center;border-width: 1px;border-color: #ef274d;background-color: #181b27;">
+					<text class="operator-words" style="align-self: center;color: #ef274d;" @click="cancelFollow(f.vlogerId)">取关</text>
+				</view>
+			</view>
+			
+		</scroll-view>
+		
+	</view>
+</template>
+
+<script>
+	var system = uni.getSystemInfoSync();
+	var app = getApp();
+	export default {
+		components: {
+		},
+		data() {
+			return {
+				screenHeight: 0,
+				
+				page: 0,
+				totalPage: 0,
+				followsList: [],
+				followsList2: [
+					{
+						"vlogerId": "1001",
+						"face": "../../static/face/face-arrow-1.png",
+						"nickname": "何翔",
+						"followed": false
+					}, 
+					{
+						"vlogerId": "1002",
+						"face": "../../static/face/face-arrow-1.png",
+						"nickname": "何翔",
+						"followed": true
+					},
+					{
+						"vlogerId": "1003",
+						"face": "../../static/face/face-arrow-1.png",
+						"nickname": "何翔",
+						"followed": false
+					}
+				]
+			}
+		},
+		onLoad() {
+			this.queryMyFollowList(0);
+		},
+		methods: {
+			// 关注/取关后的list重新状态刷新设置
+			reFreshList(vlogerId, status) {
+				var me = this;
+				var followsList = me.followsList;
+				for (var i = 0 ; i < followsList.length ; i ++) {
+					var vloger = followsList[i];
+					if (vloger.vlogerId == vlogerId) {
+						vloger.followed = status;
+						followsList.splice(i,1, vloger);
+					}
+				}
+				me.followsList = followsList;
+			},
+			cancelFollow(vlogerId) {
+				var me = this;
+				var userId = getApp().getUserInfoSession().id;
+				var serverUrl = app.globalData.serverUrl;
+				uni.request({
+					method: "POST",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/fans/cancel?myId=" + userId + "&vlogerId=" + vlogerId,
+					success(result) {
+						
+						if (result.data.status == 200) {
+							me.reFreshList(vlogerId, false);
+						} else {
+							uni.showToast({
+								title: result.data.msg,
+								icon: "none",
+								duration: 3000
+							});
+						}
+						
+					}
+				});
+				
+			},
+			followMe(vlogerId) {
+				var me = this;
+				var userId = getApp().getUserInfoSession().id;
+				var serverUrl = app.globalData.serverUrl;
+				uni.request({
+					method: "POST",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/fans/follow?myId=" + userId + "&vlogerId=" + vlogerId,
+					success(result) {
+						
+						if (result.data.status == 200) {
+							me.reFreshList(vlogerId, true);
+						} else {
+							uni.showToast({
+								title: result.data.msg,
+								icon: "none",
+								duration: 3000
+							});
+						}
+						
+					}
+				});
+				
+			},
+			queryMyFollowList(page) {
+				var me = this;
+				// if (page == 0) {
+				// 	me.followsList = [];
+				// }
+				page = page + 1;
+				var userId = getApp().getUserInfoSession().id;
+				var serverUrl = app.globalData.serverUrl;
+				
+				uni.request({
+					method: "GET",
+					header: {
+						headerUserId: userId,
+						headerUserToken: app.getUserSessionToken()
+					},
+					url: serverUrl + "/fans/queryMyFollows?myId=" + userId + "&page=" + page + "&pageSize=10",
+					success(result) {
+						if (result.data.status == 200) {
+							var followsList = result.data.data.rows;
+							var totalPage = result.data.data.total;
+							me.followsList = me.followsList.concat(followsList);
+							me.page = page;
+							me.totalPage = totalPage;
+						}
+					}
+				});
+			},
+			
+			// 上滑分页粉丝列表
+			pagingFollowsList() {
+				// this.followsList = this.followsList.concat(this.followsList);
+				
+				if (this.page >= this.totalPage) {
+					return;
+				}
+				this.queryMyFollowList(this.page);
+			}
+		}
+	}
+</script>
+

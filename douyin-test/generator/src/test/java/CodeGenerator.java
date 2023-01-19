@@ -17,7 +17,7 @@ public class CodeGenerator {
     // TODO 项目名称
     private static final String PROJECT_NAME = "douyin";
     // TODO 服务名称
-    private static final String SERVER_NAME = "fans";
+    private static final String SERVER_NAME = "vlog";
   	// TODO 数据库地址
     private static final String URL = "jdbc:mysql://127.0.0.1:3306/douyin_cloud?useUnicode=true&characterEncoding =UTF-8&serverTimezone = Asia/Shanghai";
 	// TODO 数据库用户名

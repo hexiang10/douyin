@@ -1,0 +1,82 @@
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #FFFFFF;
+	padding: 20rpx;
+	
+	display: flex;
+	flex-direction: column;
+}
+.login-box {
+	display: flex;
+	flex-direction: column;
+	margin-top: 200rpx;
+	padding: 20rpx;
+}
+.code-text {
+	font-weight: 600;
+	font-size: 60rpx;
+}
+.code-tips {
+	font-weight: 300;
+	font-size: 34rpx;
+	color: #808080;
+	margin-top: 20rpx;
+}
+.mobile-box {
+	height: 100rpx;
+	display: flex;
+	flex-direction: row;
+	padding: 0 20rpx;
+	border-color: #808080;
+	border-width: 1px;
+}
+.mobile-prefix {
+	color: #808080;
+	font-weight: 400;
+	font-size: 36rpx;
+}
+.mobile {
+	color: #0C0C0C;
+	font-weight: 400;
+	font-size: 38rpx;
+}
+.middle {
+	width: 1rpx;
+	background-color: #afafb3;
+	height: 60rpx;
+	margin: 0 40rpx;
+}
+.line {
+	height: 1rpx;
+	background-color: #afafb3;
+}
+.login-btn-text {
+	font-size: 40rpx;
+	color: #FFFFFF;
+	font-weight: 500;
+}
+.code-btn-text {
+	font-size: 30rpx;
+	color: #FFFFFF;
+	font-weight: 300;
+}
+.btn-login {
+	background-color: #ef274d;
+	/* border-color: #343438; */
+}
+.btn-login-touched {
+	background-color: #e27c82;
+	/* border-color: #000000; */
+}
+.btn-code {
+	background-color: #0abb03;
+}
+.btn-code-touched {
+	background-color: #6be866;
+}
+

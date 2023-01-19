@@ -1,0 +1,26 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: douyin-fans-server
+  cloud:
+    nacos:
+      config:
+        group: dev
+        namespace: e2a06f55-6efb-4898-a990-f43c9f455579
+        server-addr: 1.12.42.148:8848
+        file-extension: yaml
+        shared-configs:
+          - dataId: common.yaml
+            group: dev
+            refresh: true
+        extension-configs:
+          - dataId: datasource.yaml
+            group: dev
+            refresh: true
+          - dataId: redis.yaml
+            group: dev
+            refresh: true
+          - dataId: dubbo.yaml
+            group: dev
+            refresh: true

@@ -24,15 +24,19 @@ public interface VlogService extends IService<Vlog> {
 
     /**
      * 查询首页或搜索的Vlog列表
+     * @param userId 用户Id
      * @param search 搜索条件，可以为空
+     * @param page 当前页
+     * @param pageSize 页数大小
      */
-    public PagedGridResult getVlogList(String search , Integer page, Integer pageSize);
+    public PagedGridResult getVlogList(String userId,String search , Integer page, Integer pageSize);
 
     /**
      * 根据视频Id查询对应视频详情
+     * @param userId 用户Id
      * @param vlogId 视频Id
      */
-    public VlogIndexVO getVlogById(String vlogId);
+    public VlogIndexVO getVlogById(String userId,String vlogId);
 
     /**
      * 更改视频私密状态
@@ -50,5 +54,35 @@ public interface VlogService extends IService<Vlog> {
      * @param yesOrNo 视频私密类型
      */
     public PagedGridResult queryUserVlogList(String userId , Integer page, Integer pageSize,Integer yesOrNo);
+
+    /**
+     * 查询用户点赞过的视频
+     * @param userId 用户Id
+     * @param page 当前页
+     * @param pageSize 页数大小
+     */
+    public PagedGridResult getMyLikedVlogList(String userId , Integer page, Integer pageSize);
+
+    /**
+     * 查询用户点关注博主的视频
+     * @param userId   用户Id
+     * @param page     当前页
+     * @param pageSize 页数大小
+     */
+    public PagedGridResult getMyFollowVlogList(String userId, Integer page, Integer pageSize);
+
+    /**
+     * 查询用户朋友的视频
+     * @param userId   用户Id
+     * @param page     当前页
+     * @param pageSize 页数大小
+     */
+    public PagedGridResult getMyFriendVlogList(String userId, Integer page, Integer pageSize);
+
+    /**
+     * 获取视频点赞总数
+     * @param vlogId 视频Id
+     */
+    public Integer getVlogBeLikedCounts(String vlogId);
 
 }

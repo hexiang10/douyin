@@ -1,0 +1,94 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+.waterfall-wrapper {
+	background-color: #000;
+}
+.every-single-video {
+	display: flex;
+	flex-direction: column;
+	margin-top: 5px;
+}
+.half-cover {
+	border-top-left-radius: 5px; 
+	border-top-right-radius: 5px;
+}
+.vloger-name {
+	font-size: 12px;
+	color: #FFFFFF;
+	lines: 2;
+	text-overflow: ellipsis;
+	margin-left: 10px;
+}
+.bottom-part {
+	padding: 5px;
+	margin-top: 2px;
+}
+.bottom-vlog-content {
+	font-size: 12px;
+	color: #FFFFFF;
+	lines: 2;
+	text-overflow: ellipsis;
+}
+.vloger-info-box {
+	margin: 5px 0;
+	display: flex;
+	flex-direction: row;
+}
+.vloger-face {
+	width: 50rpx;
+	height: 50rpx;
+	border-radius: 10px;
+}
+.vloger-name-box {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.refresh-text {
+	color: #FFFFFF;
+	width: 750rpx;
+	align-items: center;
+	text-align: center;
+	height: 80rpx;
+}
+

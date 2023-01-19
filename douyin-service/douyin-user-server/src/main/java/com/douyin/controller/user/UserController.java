@@ -98,21 +98,21 @@ public class UserController extends BaseProperties<User> {
         String myFollowsCountsStr = redis.get(REDIS_MY_FOLLOWS_COUNTS + ":" + userId);
         // 用户的粉丝总数
         String myFansCountsStr = redis.get(REDIS_MY_FANS_COUNTS + ":" + userId);
-        //用户获赞总数，视频+评论（点赞/喜欢）总和
-        String likedVlogCountsStr = redis.get(REDIS_VLOG_BE_LIKED_COUNTS + ":" + userId);
+        //用户获赞总数，视频博主点赞/喜欢数
+        //String likedVlogCountsStr = redis.get(REDIS_VLOG_BE_LIKED_COUNTS + ":" + userId);
         String likedVlogerCountsStr = redis.get(REDIS_VLOGER_BE_LIKED_COUNTS + ":" + userId);
 
         if(StringUtils.isNotBlank(myFollowsCountsStr)){
             userVo.setMyFollowsCounts(Integer.valueOf(myFollowsCountsStr));
         }
         if(StringUtils.isNotBlank(myFansCountsStr)){
-            userVo.setMyFansCounts(Integer.valueOf(myFollowsCountsStr));
+            userVo.setMyFansCounts(Integer.valueOf(myFansCountsStr));
         }
-        if(StringUtils.isNotBlank(likedVlogCountsStr)){
-            userVo.setTotalLikeMeCounts(userVo.getTotalLikeMeCounts()+Integer.parseInt(likedVlogCountsStr));
-        }
+        //if(StringUtils.isNotBlank(likedVlogCountsStr)){
+        //    userVo.setTotalLikeMeCounts(userVo.getTotalLikeMeCounts()+Integer.parseInt(likedVlogCountsStr));
+        //}
         if(StringUtils.isNotBlank(likedVlogerCountsStr)){
-            userVo.setTotalLikeMeCounts(userVo.getTotalLikeMeCounts()+Integer.parseInt(likedVlogerCountsStr));
+            userVo.setTotalLikeMeCounts(Integer.valueOf(likedVlogerCountsStr));
         }
 
         return GraceJSONResult.ok(userVo);

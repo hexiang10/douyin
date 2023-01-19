@@ -1,0 +1,59 @@
+<style>
+.page {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		background-color: #000000;
+	}
+</style>
+
+<template>
+	<!-- <view class="page"> -->
+		<!-- :style="{height: screenHeight + 'px',width: screenWidth + 'px'}" -->
+		<view style="background-color: #007AFF;" class="page">
+			<video
+				style="width: 750rpx;"
+				:style="{height: screenSafeHeight + 'px'}"
+				:src="videoUrl" 
+				autoplay="true" 
+				controls="true" 
+				:object-fit="objectFit"></video>
+		</view>
+	<!-- </view> -->
+</template>
+
+<script>
+	var system = uni.getSystemInfoSync();
+	export default {
+		data() {
+			return {
+				videoUrl: "",
+				objectFit: "fill",
+				screenSafeHeight: system.safeArea.bottom
+			}
+		},
+		onLoad(params) {
+			var me = this;
+			var videoUrl = params.videoUrl;
+			this.videoUrl = videoUrl;
+			
+			var width = parseInt(params.width);
+			var height = parseInt(params.height);
+			this.width = width;
+			this.height = height;
+
+			if (width >= height) {
+				me.objectFit = "contain";
+			} else {
+				me.objectFit = "fill";
+			}
+		},
+		methods: {
+			
+		}
+	}
+</script>
+
+

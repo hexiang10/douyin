@@ -1,0 +1,215 @@
+<style>
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+}
+
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+
+.single-line-box {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+
+	padding: 30rpx;
+	margin-top: 20rpx;
+}
+.imoocNum-input {
+	padding-left: 10px;
+	color: #ffffff;
+	font-size: 14px;
+	width: 600rpx;
+	height: 50px;
+	background-color: #4a4c52;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+}
+.length-cal {
+	width: 100rpx;
+	height: 50px;
+	background-color: #4a4c52;
+	padding-right: 10px;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	padding-bottom: 12rpx;
+	border-top-right-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+.length-text {
+	font-size: 12px;
+	font-weight: 400;
+	color: #f1f1f1;
+}
+.tips {
+	font-size: 12px;
+	font-weight: 400;
+	color: #bfbfbf;
+	width: 700rpx;
+}
+.tips-limit {
+	font-size: 13px;
+	font-weight: 500;
+	color: #afafb3;
+	width: 750rpx;
+	padding-left: 30rpx;
+}
+.limit-wrapper {
+	background-color: #333030;
+	height: 60rpx;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+</style>
+<template>
+	<view class="page">
+		<!-- <view class="line"></view> -->
+
+		<view class="limit-wrapper" v-if="!canIModify" style="align-self: center; "><text class="tips-limit">👉🏻 修改次数已达上限！</text></view>
+
+		<view class="single-line-box" style="align-self: center;">
+			<input
+				class="imoocNum-input"
+				type="text"
+				:value="imoocNum"
+				:model="imoocNum"
+				placeholder="请填入漂亮的抖音号~"
+				maxlength="16"
+				:disabled="!canIModify"
+				@input="typingContent"
+			/>
+
+			<view class="length-cal">
+				<text class="length-text">{{ wordsLength }}/16</text>
+			</view>
+		</view>
+
+		<view class="" style="align-self: center;"><text class="tips">*注：请设置6-16的抖音号长度。抖音号只能修改一次噢~</text></view>
+	</view>
+</template>
+
+<script>
+var app = getApp();
+export default {
+	data() {
+		return {
+			oldImoocNum: getApp().getUserInfoSession().imoocNum,
+			imoocNum: getApp().getUserInfoSession().imoocNum,
+			// imoocNum: "imooc-lee",
+			// imoocNum: "",
+			wordsLength: 0,
+			canIModify: false // 用于判断是否可以修改抖音号，每个人仅限修改一次（一般可以用于收费二次修改，或者1年免费1次）
+		};
+	},
+	onNavigationBarButtonTap() {
+		var imoocNum = this.imoocNum;
+		if (imoocNum.length > 16 || imoocNum.length < 6) {
+			uni.showToast({
+				icon: 'none',
+				title: '抖音号长度为6-16'
+			});
+			return;
+		}
+
+		var oldImoocNum = this.oldImoocNum;
+		if (oldImoocNum == imoocNum) {
+			uni.showToast({
+				icon: 'none',
+				title: '抖音号相同'
+			});
+			return;
+		}
+
+		var canIModify = this.canIModify;
+		if (canIModify == false) {
+			uni.showToast({
+				icon: 'none',
+				title: '修改次数已达上限'
+			});
+			return;
+		}
+
+		this.updateIMoocNum();
+	},
+	onLoad() {
+		var canIModify = getApp().getUserInfoSession().canImoocNumBeUpdated == 1;
+		this.canIModify = canIModify;
+
+		// 导航栏按钮隐藏
+		if (!canIModify) {
+			let pages = getCurrentPages();
+			let page = pages[pages.length - 1];
+			let currentWebview = page.$getAppWebview();
+			currentWebview.setTitleNViewButtonStyle(0, {
+				text: '0',
+				width: 0
+			});
+		}
+	},
+	onShow() {
+		this.wordsLength = this.imoocNum.length;
+	},
+	methods: {
+		updateIMoocNum() {
+			var me = this;
+			var userId = getApp().getUserInfoSession().id;
+			var imoocNum = this.imoocNum;
+
+			// 后端还是需要校验能否修改，因为用户可以绕过前端直接请求后端接口
+			var pendingUserInfo = {
+				id: userId,
+				imoocNum: imoocNum
+			};
+
+			// 修改抖音号
+			var serverUrl = app.globalData.serverUrl;
+			uni.request({
+				method: 'POST',
+				header: {
+					headerUserId: userId,
+					headerUserToken: app.getUserSessionToken()
+				},
+				url: serverUrl + '/user/modify?type=2',
+				data: pendingUserInfo,
+				success(result) {
+					if (result.data.status == 200) {
+						var userInfoUpdated = result.data.data;
+						// 重置本地用户信息
+						app.setUserInfoSession(userInfoUpdated);
+
+						uni.navigateBack({
+							delta: 1,
+							animationType: 'fade-out'
+						});
+					} else {
+						uni.showToast({
+							title: result.data.msg,
+							icon: 'none',
+							duration: 3000
+						});
+					}
+				}
+			});
+		},
+
+		typingContent(e) {
+			var event = e;
+			this.imoocNum = e.detail.value;
+			this.wordsLength = this.imoocNum.length;
+		}
+	}
+};
+</script>

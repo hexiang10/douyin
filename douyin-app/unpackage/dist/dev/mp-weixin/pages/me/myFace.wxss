@@ -1,0 +1,25 @@
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #000000;
+}
+.bg-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.bg-size {
+	width: 750rpx;
+	height: 750rpx;
+}
+.button-change-bg {
+	background-color: #1e1e1e;
+}
+.button-change-bg-touched {
+	background-color: #646262;
+}
+

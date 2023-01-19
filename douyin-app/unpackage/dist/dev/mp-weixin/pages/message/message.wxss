@@ -1,0 +1,142 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* .status_bar {
+	height: var(--status-bar-height);
+	width: 100%;
+} */
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+}
+.line {
+	height: 1rpx;
+	background-color: #393a41;
+	width: 750rpx;
+}
+.user-face {
+	width: 120rpx;
+	height: 120rpx;
+	border-radius: 100rpx;
+	border-width: 1px;
+	border-color: #F1F1F1;
+}
+.msg-item-box {
+	display: flex;
+	flex-direction: column;
+	flex-direction: row;
+	justify-content: space-between;
+	padding: 30rpx;
+	margin-top: 10rpx;
+}
+.msg-item-left {
+	display: flex;
+	flex-direction: column;
+	flex-direction: row;
+}
+.msg-item-middle {
+	display: flex;
+	flex-direction: column;
+	margin-left: 30rpx;
+	padding-top: 20rpx;
+}
+.user-nickname {
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: 600;
+}
+.msg-content {
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: 300;
+	margin-top: 2rpx;
+}
+.msg-item-right {
+	width: 160rpx;
+	height: 70rpx;
+	opacity: 0.8;
+	border-radius: 8rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+.op-fans-btn {
+	font-size: 13px;
+	color: #FFFFFF;
+	font-weight: 500;
+}
+.vlog-cover {
+	width: 100rpx;
+	height: 120rpx;
+	margin-right: 10rpx;
+	border-radius: 2px;
+}
+

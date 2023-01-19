@@ -1,0 +1,44 @@
+
+.page {
+	background-color: #000000;
+	opacity: 0.9;
+}
+.btn-cancel {
+	background-color: #1d1d1e;
+	border-color: #3a3a3d;
+}
+.btn-cancel-touched {
+	background-color: #515156;
+	border-color: #2b2b2f;
+}
+.all-box {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	height: 280rpx;
+}
+.share-item {
+	display: flex;
+	flex-direction: column;
+	margin-top: 60rpx;
+}
+.icon-wrapper {
+	width: 120rpx;
+	height: 120rpx;
+	background-color: #343437;
+	border-radius: 100px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	opacity: 0.8;
+}
+.icon-image {
+	width: 60rpx;
+	height: 60rpx;
+}
+.icon-tag-text {
+	color: #FFFFFF;
+	font-size: 14px;
+	margin-top: 10rpx;
+}
+

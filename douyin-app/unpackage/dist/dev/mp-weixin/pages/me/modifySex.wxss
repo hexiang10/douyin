@@ -1,0 +1,91 @@
+
+view,
+label,
+swiper-item,
+scroll-view {
+  display:flex;
+  flex-direction:column;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: auto;
+  align-items: stretch;
+  align-content: flex-start;
+}
+view,
+image,
+input,
+scroll-view,
+swiper,
+swiper-item,
+text,
+textarea,
+video {
+  position: relative;
+  border: 0px solid #000000;
+  box-sizing: border-box;
+}
+swiper-item {
+  position: absolute;
+}
+button {
+  margin: 0;
+}
+
+
+.page {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background-color: #181b27;
+	
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+.line {
+	height: 1rpx;
+	background-color: #605e5e;
+	width: 620rpx;
+}
+.sex-box {
+	width: 680rpx;
+	height: 240rpx;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 50rpx;
+	background-color: #4a4c52;
+	border-radius: 20px;
+}
+.sex-item {
+	background-color: #4a4c52;
+}
+.sex-item-touched {
+	background-color: #6d6b6b;
+}
+.left-sex-part {
+	width: 580rpx;
+	height: 120rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+.left-sex {
+	margin-left: 30rpx;
+	color: #FFFFFF;
+}
+.left-choose {
+	width: 100rpx;
+	height: 120rpx;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+.icon-right {
+	width: 60rpx;
+	height: 60rpx;
+}
+
+

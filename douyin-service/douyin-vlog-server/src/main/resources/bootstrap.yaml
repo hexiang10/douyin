@@ -24,6 +24,3 @@ spring:
           - dataId: dubbo.yaml
             group: dev
             refresh: true
-dubbo:
-  cloud:
-    subscribed-services: douyin-vlog-server
