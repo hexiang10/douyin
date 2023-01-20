@@ -343,8 +343,8 @@ export default {
 			// commentTouched: false,
 			activeIndex: -1,
 
-			bottomTxt: '到底啦~深不？',
-			placeholder: '爱评论的人都是天使~',
+			bottomTxt: '到底啦~',
+			placeholder: '爱评论的人都是真爱坤~',
 			commentFocus: false,
 			thisFatherCommentId: '0', // 用于标识当前的回复是否有父id，还是仅仅只是普通评论
 
@@ -391,7 +391,7 @@ export default {
 					if (me.thisVlogTotalComentCounts == 0) {
 						me.bottomTxt = '抢一个沙发吧~';
 					} else {
-						me.bottomTxt = '到底啦~深不？';
+						me.bottomTxt = '到底啦~';
 					}
 				}
 			});
@@ -409,7 +409,7 @@ export default {
 				},
 				url: serverUrl + '/comment/unlike?userId=' + me.loginUserId + '&commentId=' + commentId,
 				success(result) {
-					console.log(result);
+					// console.log(result);
 
 					if (result.data.status == 200) {
 						me.reLikeCommentList(index, 0);
@@ -454,7 +454,7 @@ export default {
 				},
 				url: serverUrl + '/comment/like?userId=' + me.loginUserId + '&commentId=' + commentId,
 				success(result) {
-					console.log(result);
+					// console.log(result);
 
 					if (result.data.status == 200) {
 						me.reLikeCommentList(index, 1);
@@ -514,7 +514,7 @@ export default {
 							},
 							url: serverUrl + '/comment/delete?commentUserId=' + commentUserId + '&commentId=' + commentId + '&vlogId=' + vlogId,
 							success(result) {
-								console.log(result);
+								// console.log(result);
 
 								if (result.data.status == 200) {
 									me.doCommentPagingList(1, true);
@@ -593,7 +593,7 @@ export default {
 
 			this.thisFatherCommentId = '0'; // 恢复默认的回复fatherId为“0”
 			this.commentFocus = false;
-			this.placeholder = '爱评论的人都是天使~';
+			this.placeholder = '爱评论的人都是真爱坤~';
 		},
 
 		// 回复他人的评论
@@ -634,9 +634,9 @@ export default {
 				return;
 			}
 
-			if (me.currentComment.length > 50) {
+			if (me.currentComment.length > 120) {
 				uni.showToast({
-					title: '评论字数限制50以内噢~',
+					title: '评论字数限制120以内噢~',
 					mask: true,
 					position: 'bottom'
 				});
@@ -653,7 +653,7 @@ export default {
 				commentUserId: userId,
 				content: me.currentComment
 			};
-
+			// console.log(fatherCommentId);
 			uni.request({
 				method: 'POST',
 				header: {
@@ -663,7 +663,7 @@ export default {
 				url: serverUrl + '/comment/create',
 				data: pendingCommentObject,
 				success(result) {
-					console.log(result);
+					// console.log(result);
 
 					if (result.data.status == 200) {
 						var newCommentObject = result.data.data;

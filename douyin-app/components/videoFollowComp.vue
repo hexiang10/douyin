@@ -162,12 +162,12 @@
 					<view class="like-box">
 						<image v-if="!item.doILikeThisVlog" src="/static/images/icon-unlike.png" @click="likeOrDislikeVlog(1)" class="icon"></image>
 						<image v-if="item.doILikeThisVlog" src="/static/images/icon-like.png" @click="likeOrDislikeVlog(0)" class="icon"></image>
-						<text class="some-counts">{{ item.likeCounts }}</text>
+						<text class="some-counts">{{ getGraceNumber(item.likeCounts) }}</text>
 					</view>
 					<view class="comment-and-share-box">
 						<image src="/static/images/icon-comments.png" @click="commentToggle" class="icon"></image>
 						<!-- <text class="some-counts">{{item.commentsCounts}}</text> -->
-						<text class="some-counts">{{ thisVlogTotalComentCounts }}</text>
+						<text class="some-counts">{{ getGraceNumber(thisVlogTotalComentCounts) }}</text>
 					</view>
 					<view class="comment-and-share-box">
 						<image src="/static/images/icon-share.png" @click="shareToggle" class="icon"></image>
@@ -276,6 +276,10 @@ export default {
 		}
 	},
 	methods: {
+		// 把超过1000或10000的数字调整，比如1.3k/6.8w
+		getGraceNumber(num) {
+			return getApp().graceNumber(num);
+		},
 		freshCommentCounts() {
 			var me = this;
 			var userId = getApp().getUserInfoSession().id;

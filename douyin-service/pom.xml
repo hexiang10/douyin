@@ -13,6 +13,7 @@
         <module>douyin-middleware-server</module>
         <module>douyin-vlog-server</module>
         <module>douyin-fans-server</module>
+        <module>douyin-comment-server</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 

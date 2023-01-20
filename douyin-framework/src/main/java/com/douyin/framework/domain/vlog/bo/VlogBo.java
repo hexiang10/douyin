@@ -1,7 +1,9 @@
 package com.douyin.framework.domain.vlog.bo;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
+
 
 /**
  * <p>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.douyin.mapper.comment.CommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.douyin.framework.domain.comment.Comment">
+        <id column="id" property="id" />
+        <result column="vloger_id" property="vlogerId" />
+        <result column="father_comment_id" property="fatherCommentId" />
+        <result column="vlog_id" property="vlogId" />
+        <result column="comment_user_id" property="commentUserId" />
+        <result column="content" property="content" />
+        <result column="like_counts" property="likeCounts" />
+        <result column="created_time" property="createdTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, vloger_id, father_comment_id, vlog_id, comment_user_id, content, like_counts, create_time
+    </sql>
+
+    <!--
+        FIXME
+        思考：阿里规范明确规定不能超过三表关联，这里达到了四张表
+        我们应该如何优化呢？使得sql脚本查询表位三表或者两表查询
+        又或者说我们能不能不使用数据库，使用别的手段（中间件）来实现呢？
+     -->
+
+    <select id="getCommentList" parameterType="map" resultType="com.douyin.framework.domain.comment.vo.CommentVO">
+
+        SELECT
+            c.id as commentId,
+            c.vlog_id   as vlogId,
+            u.id as vlogerId,
+            u.nickname as commentUserNickname,
+            u.face as commentUserFace,
+            c.father_comment_id as fatherCommentId,
+            c.comment_user_id as commentUserId,
+            c.content as content,
+            c.like_counts as likeCounts,
+            fu.nickname as replyedUserNickname,
+            c.created_time as createdTime
+        FROM
+            dy_comment as c
+        LEFT JOIN
+            dy_user as u
+        ON
+            c.comment_user_id = u.id
+        LEFT JOIN
+            dy_comment as fc
+        ON
+            c.father_comment_id = fc.id
+        LEFT JOIN
+            dy_user as fu
+        ON
+            fc.comment_user_id = fu.id
+        WHERE
+            c.vlog_id = #{paramMap.vlogId}
+        ORDER BY
+            c.like_counts DESC,
+            c.created_time DESC
+
+    </select>
+
+</mapper>

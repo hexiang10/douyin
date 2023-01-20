@@ -3,7 +3,6 @@ package com.douyin.controller.fans;
 import com.douyin.common.enums.ResponseStatusEnum;
 import com.douyin.common.properties.BaseProperties;
 import com.douyin.common.results.GraceJSONResult;
-import com.douyin.framework.domain.user.User;
 import com.douyin.service.fans.FansService;
 import com.douyin.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
- * 粉丝表
-
- 前端控制器
+ * 粉丝表前端控制器
  * </p>
  *
  * @author hexiang
@@ -44,19 +41,13 @@ public class FansController extends BaseProperties {
     @PostMapping("/follow")
     public GraceJSONResult follow(@RequestParam String myId, @RequestParam String vlogerId){
 
-        // 判断两个Id不能为空
+        // 判断两个id不能为空
         if(StringUtils.isBlank(myId)||StringUtils.isBlank(vlogerId)){
             return GraceJSONResult.errorCustom(ResponseStatusEnum.FAILED);
         }
 
-        // 判断两个id 对应的用户是否存在
-        User vloger= userService.getUser(vlogerId);
-
-        if(vloger==null){
-            return GraceJSONResult.errorMsg("被关注用户不存在");
-        }
-        User user = userService.getUser(myId);
-        if(user ==null){
+        // 判断两个id对应的用户是否存在
+        if(userService.getUser(vlogerId)==null||userService.getUser(myId) ==null){
             return GraceJSONResult.errorMsg("关注用户不存在");
         }
 
@@ -64,7 +55,6 @@ public class FansController extends BaseProperties {
         if(myId.equalsIgnoreCase(vlogerId)){
             return GraceJSONResult.errorMsg("不能自己关注自己~");
         }
-
         // 关注用户
         fansService.doFollow(myId, vlogerId);
 

@@ -3,7 +3,9 @@ package com.douyin.framework.domain.user.bo;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 
 /**
@@ -12,7 +14,7 @@ import org.hibernate.validator.constraints.NotBlank;
  */
 
 @Data
-public class RegistLoginBo {
+public class RegistLoginBo implements Serializable {
     @NotBlank(message = "手机号不能为空")
     @Length(min = 11, max = 11, message = "手机号长度不正确")
     private String mobile;
