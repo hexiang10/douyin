@@ -113,10 +113,25 @@
 		<!-- 左中右的三个页面切换，依次是：附近 - 关注 - 推荐 -->
 		<swiper style="my-swiper" :style="{height: screenHeight + 'px'}" :current="curIndex" @change="changeTopTab">
 			<swiper-item>
-				<view class="near-by" :style="{height: screenHeight+'px'}">
-					<text class="warn-info">暂未开放，敬请期待！</text>
+				<view v-if="myUserInfo == null" class="my-follow" :style="{height: screenHeight+'px'}">
+					<text class="warn-info">请登录后查看！</text>
 				</view>
+<!-- 				<view class="near-by" :style="{height: screenHeight+'px'}">
+					<text class="warn-info">暂未开放，敬请期待！</text>
+				</view> -->
+					<video-nearby-comp
+						ref="videoNearbyComp"
+						:screenHeight="screenHeight" 
+						:playNearStatus="playNearStatus" 
+						:videoList="videoList"
+						:refreshList="refreshList"
+						:pagingList="pagingList"
+						@showLoading="showLoading"
+						@hideLoading="hideLoading"
+						@letNearVideoPause="letNearVideoPause"
+						@displayVideoPaging="displayVideoPaging"></video-nearby-comp>
 			</swiper-item>
+			
 			<swiper-item>
 				<view v-if="myUserInfo == null" class="my-follow" :style="{height: screenHeight+'px'}">
 					<text class="warn-info">请登录后查看！</text>
@@ -187,13 +202,15 @@
 	// import uniSwiper from '@/components/swiper';
 	import videoComp from '@/components/videoComp.vue';
 	import videoFollowComp from '@/components/videoFollowComp.vue';
+	import videoNearbyComp from '@/components/videoNearbyComp.vue';
 	export default {
 		components: {
 			// uniHeader,
 			// uniFooter,
 			// uniSwiper,
 			videoComp,
-			videoFollowComp
+			videoFollowComp,
+			videoNearbyComp
 		},
 		data() {
 			return {
@@ -205,6 +222,7 @@
 				curIndex: 2,
 				playStatus: false,
 				playFollowStatus: false,
+				playNearStatus: false,
 				
 				// videoList: getApp().getDefaultVlogList(),			// 首页一开始查询所得的默认视频列表
 				videoList: [],			// 首页一开始查询所得的默认视频列表
@@ -223,14 +241,20 @@
 			
 			// 切换视频要做暂停或播放的判断
 			var me = this;
+			// console.log(tabIndex);
 			if (tabIndex == 0) {
 				// 虚位以待
-			} else if (tabIndex == 1) {
+				me.playNearStatus = true;
+				me.playFollowStatus = false;
 				me.playStatus = false;
+			} else if (tabIndex == 1) {
 				me.playFollowStatus = true;
+				me.playStatus = false;
+				me.playNearStatus = false;
 			} else if (tabIndex == 2) {
 				me.playStatus = true;
 				me.playFollowStatus = false;
+				me.playNearStatus = false;
 			}
 		},
 		onShow() {
@@ -248,10 +272,11 @@
 				}
 			}
 			
-			
+			// console.log(me.curIndex);
 			// 判断如果当前是tab为1或2，则播放，否则不播放
 			if (me.curIndex == 0) {
 				// 虚位以待
+				me.playNearStatus = true;
 			} else if (me.curIndex == 1) {
 				me.playFollowStatus = true;
 			} else if (me.curIndex == 2) {
@@ -274,9 +299,11 @@
 		},
 		onHide() {
 			var me = this;
+			// console.log(me.curIndex);
 			// 显示和隐藏，需要判断根据不同tab做暂停或者隐藏
 			if (me.curIndex == 0) {
 				// 虚位以待
+				me.playNearStatus = false;
 			} else if (me.curIndex == 1) {
 				me.playFollowStatus = false;
 			} else if (me.curIndex == 2) {
@@ -290,6 +317,7 @@
 			// 下拉刷新判断，如果是不同tab，那么组件中刷新的请求也不同
 			if (me.curIndex == 0) {
 				// 虚位以待
+				this.$refs.videoNearbyComp.displayVideoPaging(1, true);
 			} else if (me.curIndex == 1) {
 				this.$refs.videoFollowComp.displayVideoPaging(1, true);
 			} else if (me.curIndex == 2) {
@@ -309,6 +337,7 @@
 			changeTopTab: function(e) {
 				var current = e.detail.current;
 				this.curIndex = current;
+				this.playNearStatus = this.curIndex === 0 ? true : false;
 				this.playFollowStatus = this.curIndex === 1 ? true : false;
 				this.playStatus = this.curIndex === 2 ? true : false;
 			},
@@ -316,6 +345,7 @@
 			tapFollow: function(current) {
 				// console.log(current)
 				this.curIndex = current;
+				this.playNearStatus = this.curIndex === 0 ? true : false;
 				this.playFollowStatus = this.curIndex === 1 ? true : false;
 				this.playStatus = this.curIndex === 2 ? true : false;
 			},
@@ -329,6 +359,9 @@
 			},
 			letFollowVideoPause() {
 				this.playFollowStatus = false;
+			},
+			letNearVideoPause() {
+				this.playNearStatus = false;
 			}
 		}
 	}

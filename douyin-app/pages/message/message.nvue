@@ -292,7 +292,7 @@ export default {
 				success(result) {
 					if (result.data.status == 200) {
 						var msgList = result.data.data;
-						console.log(msgList);
+						// console.log(msgList);
 						if (msgList != null && msgList != undefined && msgList.length > 0) {
 							me.msgList = me.msgList.concat(msgList);
 							me.page = page;

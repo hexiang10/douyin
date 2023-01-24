@@ -14,7 +14,9 @@ import com.douyin.framework.domain.comment.vo.CommentVO;
 import com.douyin.framework.utils.IPageUtil;
 import com.douyin.mapper.comment.CommentMapper;
 import com.douyin.service.comment.CommentService;
+import com.douyin.service.middleware.MessageService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Autowired
     RedisUtil redis;
+
+    @DubboReference
+    MessageService messageService;
 
     // 短视频的评论总数
     public static final String REDIS_VLOG_COMMENT_COUNTS = "redis_vlog_comment_counts";
@@ -75,6 +80,53 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         // 留言后的最新评论需要返回给前端进行展示
         CommentVO commentVO = new CommentVO();
         BeanUtils.copyProperties(comment,commentVO);
+
+        // 系统消息：评论/回复 —— V1
+        //Integer type = MessageTypeEnum.COMMENT_VLOG.type;
+        //if(StringUtils.isNotBlank(commentBO.getFatherCommentId())&& !commentBO.getFatherCommentId().equalsIgnoreCase("0")){
+        //    type = MessageTypeEnum.REPLY_YOU.type;
+        //}
+        //Map msgContent = new HashMap();
+        //Vlog vlog = vlogService.getById(commentBO.getVlogId());
+        //msgContent.put("commentId",comment.getId());
+        //msgContent.put("commentContent",commentBO.getContent());
+        //msgContent.put("vlogId", commentBO.getVlogId());
+        //msgContent.put("vlogCover", vlog.getCover());
+        //msgService.createMsg(commentBO.getCommentUserId(),
+        //        commentBO.getVlogerId(),
+        //        type,msgContent);
+
+        // 系统消息：评论/回复 —— V2
+        //Vlog vlog = vlogService.getById(commentBO.getVlogId());
+        //Map msgContent = new HashMap();
+        //msgContent.put("vlogId", vlog.getId());
+        //msgContent.put("vlogCover", vlog.getCover());
+        //msgContent.put("commentId", comment.getId());
+        //msgContent.put("commentContent", commentBO.getContent());
+        //Integer type = MessageEnum.COMMENT_VLOG.type;
+        //String routeType = MessageEnum.COMMENT_VLOG.enValue;
+        //if (StringUtils.isNotBlank(commentBO.getFatherCommentId()) &&
+        //        !commentBO.getFatherCommentId().equalsIgnoreCase("0") ) {
+        //    type = MessageEnum.REPLY_YOU.type;
+        //    routeType = MessageEnum.REPLY_YOU.enValue;
+        //}
+
+//        msgService.createMsg(commentBO.getCommentUserId(),
+//                commentBO.getVlogerId(),
+//                type,
+//                msgContent);
+
+        // MQ异步解耦
+        //MessageMO messageMO = new MessageMO();
+        //messageMO.setFromUserId(commentBO.getCommentUserId());
+        //messageMO.setToUserId(commentBO.getVlogerId());
+        //messageMO.setMsgContent(msgContent);
+        //rabbitTemplate.convertAndSend(
+        //        RabbitMQConfig.EXCHANGE_MSG,
+        //        "sys.msg." + routeType,
+        //        JsonUtils.objectToJson(messageMO));
+
+        messageService.sentCommentMessage(comment);
 
         return commentVO;
     }

@@ -14,13 +14,13 @@ spring:
           - dataId: common.yaml
             group: dev
             refresh: true
-        extension-configs:
           - dataId: datasource.yaml
             group: dev
             refresh: true
-          - dataId: redis.yaml
+          - dataId: dubbo.yaml
             group: dev
             refresh: true
-          - dataId: dubbo.yaml
+        extension-configs:
+          - dataId: redis.yaml
             group: dev
             refresh: true

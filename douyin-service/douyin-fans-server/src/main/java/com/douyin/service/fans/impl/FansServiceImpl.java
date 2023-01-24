@@ -14,7 +14,9 @@ import com.douyin.framework.domain.vlog.vo.VlogerVO;
 import com.douyin.framework.utils.IPageUtil;
 import com.douyin.mapper.fans.FansMapper;
 import com.douyin.service.fans.FansService;
+import com.douyin.service.middleware.MessageService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +47,9 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
     @Autowired
     FansMapper fansMapper;
 
+    @DubboReference
+    MessageService messageService;
+
     // 我的粉丝总数
     public static final String REDIS_FANS_AND_VLOGGER_RELATIONSHIP = "redis_fans_and_vlogger_relationship";
 
@@ -70,7 +75,21 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
         }else{
             fans.setIsFanFriendOfMine(YesOrNo.NO.type);
         }
+
         fansMapper.insert(fans);
+
+        // 系统消息：关注
+        //msgService.createMsg(myId,vlogerId, MessageTypeEnum.FOLLOW_YOU.type,null);
+        //MessageMO messageMO = new MessageMO();
+        //messageMO.setFromUserId(myId);
+        //messageMO.setToUserId(vlogerId);
+        //// 优化：使用mq异步解耦
+        //rabbitTemplate.convertAndSend(
+        //        RabbitMQConfig.EXCHANGE_MSG,
+        //        "sys.msg." + MessageEnum.FOLLOW_YOU.enValue,
+        //        JsonUtils.objectToJson(messageMO));
+
+        messageService.sentFollowMessage(myId,vlogerId);
     }
 
     /**

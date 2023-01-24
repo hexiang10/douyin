@@ -1,7 +1,6 @@
 server:
   port: 8889
 spring:
-  # 服务名称
   application:
     name: douyin-middleware-server
   cloud:
@@ -15,13 +14,22 @@ spring:
           - dataId: common.yaml
             group: dev
             refresh: true
-        extension-configs:
-          - dataId: minio.yaml
+          - dataId: datasource.yaml
             group: dev
-            refresh:  true
+            refresh: true
           - dataId: dubbo.yaml
             group: dev
             refresh: true
-          - dataId: datasource.yaml
+        extension-configs:
+          - dataId: redis.yaml
+            group: dev
+            refresh: true
+          - dataId: minio.yaml
+            group: dev
+            refresh:  true
+          - dataId: mongodb.yaml
+            group: dev
+            refresh: true
+          - dataId: rabbitmq.yaml
             group: dev
             refresh: true

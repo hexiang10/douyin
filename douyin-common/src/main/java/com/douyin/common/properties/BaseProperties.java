@@ -15,6 +15,7 @@ public class BaseProperties<T> {
     @Resource
     public RedisCacheUtil<T> redisCache;
 
+    public static final Integer COMMON_START_PAGE_ZERO = 0;
     public static final Integer COMMON_START_PAGE = 1;
     public static final Integer COMMON_PAGE_SIZE = 10;
     public static final String MOBILE_SMSCODE = "mobile:smscode";

@@ -4,6 +4,7 @@ package com.douyin.config.middleware;
 import com.douyin.utils.middleware.MinIOUtil;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Data
+@RefreshScope
 public class MinIOConfig {
 
     @Value("${minio.endpoint}")

@@ -26,7 +26,7 @@ import java.io.IOException;
  */
 
 @RestController
-@Tag(name = "MinioController",description = "短视频业务模块")
+@Tag(name = "视频上传服务",description = "MinioController")
 public class MinioController {
 
     @Autowired

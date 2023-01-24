@@ -4,6 +4,7 @@ import com.douyin.common.properties.BaseProperties;
 import com.douyin.common.results.GraceJSONResult;
 import com.douyin.framework.domain.comment.bo.CommentBO;
 import com.douyin.service.comment.CommentService;
+import com.douyin.service.middleware.MessageService;
 import com.douyin.service.user.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,9 @@ public class CommentController extends BaseProperties {
 
     @DubboReference
     UserService userService;
+
+    @DubboReference
+    MessageService messageService;
 
     /**
      * 发表评论
@@ -108,6 +112,42 @@ public class CommentController extends BaseProperties {
         // 注意bigkey问题
         redis.incrementHash(REDIS_VLOG_COMMENT_LIKED_COUNTS,commentId,1);
         redis.setHashValue(REDIS_USER_LIKE_COMMENT,userId+":"+commentId,"1");
+
+        // 系统消息：点赞评论 —— V1
+        //Map msgContent = new HashMap();
+        //Comment comment = commentService.getById(commentId);
+        //Vlog vlog = vlogService.getById(comment.getVlogId());
+        //msgContent.put("commentId",commentId);
+        //msgContent.put("vlogId", vlog.getId());
+        //msgContent.put("vlogCover", vlog.getCover());
+        //msgService.createMsg(userId,
+        //        comment.getCommentUserId(),
+        //        MessageTypeEnum.LIKE_COMMENT.type, msgContent);
+
+        // 系统消息：点赞评论 ——V2
+        //Comment comment = commentService.getById(commentId);
+        //Vlog vlog = vlogService.getById(comment.getVlogId());
+        //Map msgContent = new HashMap();
+        //msgContent.put("vlogId", vlog.getId());
+        //msgContent.put("vlogCover", vlog.getCover());
+        //msgContent.put("commentId", commentId);
+//        msgService.createMsg(userId,
+//                            comment.getCommentUserId(),
+//                            MessageEnum.LIKE_COMMENT.type,
+//                            msgContent);
+
+        // MQ异步解耦
+        //MessageMO messageMO = new MessageMO();
+        //messageMO.setFromUserId(userId);
+        //messageMO.setToUserId(comment.getCommentUserId());
+        //messageMO.setMsgContent(msgContent);
+        //rabbitTemplate.convertAndSend(
+        //        RabbitMQConfig.EXCHANGE_MSG,
+        //        "sys.msg." + MessageEnum.LIKE_COMMENT.enValue,
+        //        JsonUtils.objectToJson(messageMO));
+
+        messageService.sentLikeCommentMessage(userId,commentId);
+
         return GraceJSONResult.ok();
     }
 
