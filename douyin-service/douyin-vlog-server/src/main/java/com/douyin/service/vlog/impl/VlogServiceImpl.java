@@ -218,21 +218,42 @@ public class VlogServiceImpl extends ServiceImpl<VlogMapper, Vlog> implements Vl
      * @param vlogId 视频Id
      */
     @Override
-    public Integer getVlogBeLikedCounts(String vlogId){
+    public Integer getVlogBeLikedCounts(String vlogId) {
         String countsStr = redis.get(REDIS_VLOG_BE_LIKED_COUNTS + ":" + vlogId);
-        if(StringUtils.isBlank(countsStr)){
+        if (StringUtils.isBlank(countsStr)) {
             countsStr = "0";
         }
         return Integer.valueOf(countsStr);
     }
 
     /**
+     * 把counts输入数据库
+     *
+     * @param vlogId 视频Id
+     * @param counts 数量
+     * @param type   刷新类型：0刷新视频点赞数；1刷新视频评论数
+     */
+    @Override
+    @Transactional
+    public void flushCounts(String vlogId, Integer counts, Integer type) {
+        Vlog vlog = new Vlog();
+        vlog.setId(vlogId);
+        if (type == 0) {
+            vlog.setLikeCounts(counts);
+        }
+        if (type == 1) {
+            vlog.setCommentsCounts(counts);
+        }
+        vlogMapper.updateById(vlog);
+    }
+
+    /**
      * 判断用户是否点赞此视频
      *
-     * @param myId 用户Id
+     * @param myId   用户Id
      * @param vlogId 视频Id
      */
-    public boolean doILikeVlog(String myId,String vlogId){
+    public boolean doILikeVlog(String myId, String vlogId) {
         String doILike = redis.get(REDIS_USER_LIKE_VLOG + ":" + myId + ":" + vlogId);
         return StringUtils.isNotBlank(doILike)
                 && doILike.equalsIgnoreCase("1");

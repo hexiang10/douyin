@@ -2,6 +2,7 @@ package com.douyin.controller.comment;
 
 import com.douyin.common.properties.BaseProperties;
 import com.douyin.common.results.GraceJSONResult;
+import com.douyin.framework.domain.comment.Comment;
 import com.douyin.framework.domain.comment.bo.CommentBO;
 import com.douyin.service.comment.CommentService;
 import com.douyin.service.middleware.MessageService;
@@ -11,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,12 +28,16 @@ import javax.validation.Valid;
  */
 @RestController
 @Slf4j
+@RefreshScope
 @RequestMapping("/comment")
-@Tag(name = "评论业务模块",description = "CommentController")
+@Tag(name = "评论业务模块", description = "CommentController")
 public class CommentController extends BaseProperties {
 
     @Autowired
     CommentService commentService;
+
+    @Value("${douyin.commentLikedCounts}")
+    Integer commentLikedCounts;
 
     @DubboReference
     UserService userService;
@@ -146,7 +153,21 @@ public class CommentController extends BaseProperties {
         //        "sys.msg." + MessageEnum.LIKE_COMMENT.enValue,
         //        JsonUtils.objectToJson(messageMO));
 
-        messageService.sentLikeCommentMessage(userId,commentId);
+        messageService.sentLikeCommentMessage(userId, commentId);
+
+        // 点赞完毕，获得当前redis中的总数
+        // 判断数量是否满足阈值，若超过，则触发入库
+        String countsStr = redis.get(REDIS_VLOG_COMMENT_LIKED_COUNTS + ":" + commentId);
+        Integer counts = 0;
+        if (StringUtils.isNotBlank(countsStr)) {
+            counts = Integer.valueOf(countsStr);
+            if (counts % commentLikedCounts == 0 && counts != 0) {
+                Comment comment = new Comment();
+                comment.setId(commentId);
+                comment.setLikeCounts(counts);
+                commentService.updateById(comment);
+            }
+        }
 
         return GraceJSONResult.ok();
     }

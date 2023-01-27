@@ -15,11 +15,14 @@ import com.douyin.framework.utils.IPageUtil;
 import com.douyin.mapper.comment.CommentMapper;
 import com.douyin.service.comment.CommentService;
 import com.douyin.service.middleware.MessageService;
+import com.douyin.service.vlog.VlogService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +38,7 @@ import java.util.Map;
  * @since 2023-01-20
  */
 @DubboService
+@RefreshScope
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
     @Autowired
@@ -48,6 +52,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @DubboReference
     MessageService messageService;
+
+    @DubboReference
+    VlogService vlogService;
+
+    @Value("${douyin.vlogCommentCounts}")
+    Integer vlogCommentCounts;
 
     // 短视频的评论总数
     public static final String REDIS_VLOG_COMMENT_COUNTS = "redis_vlog_comment_counts";
@@ -127,6 +137,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //        JsonUtils.objectToJson(messageMO));
 
         messageService.sentCommentMessage(comment);
+
+        // 评论完毕，获得当前redis中的总数
+        // 判断数量是否满足阈值，若超过，则触发入库
+        String countsStr = redis.get(REDIS_VLOG_COMMENT_COUNTS + ":" + commentBO.getVlogId());
+        Integer counts = 0;
+        if (StringUtils.isNotBlank(countsStr)) {
+            counts = Integer.valueOf(countsStr);
+            if (counts % vlogCommentCounts == 0 && counts != 0) {
+                vlogService.flushCounts(commentBO.getVlogId(), counts, 1);
+            }
+        }
 
         return commentVO;
     }

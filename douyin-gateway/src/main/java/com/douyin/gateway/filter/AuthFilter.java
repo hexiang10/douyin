@@ -2,11 +2,12 @@ package com.douyin.gateway.filter;
 
 import com.douyin.common.enums.ResponseStatusEnum;
 import com.douyin.common.properties.BaseProperties;
+import com.douyin.gateway.config.ExcludeUrlsConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -27,21 +28,25 @@ import java.util.Map;
 @RefreshScope
 public class AuthFilter extends BaseProperties implements GlobalFilter, Ordered {
 
+    @Autowired
+    ExcludeUrlsConfig excludeUrlsConfig;
+
     //排除的链接
-    @Value("#{'${gateway.excludedUrls}'.split(',')}")
-    private List<String> excludedUrls;
+    //@Value("#{'${gateway.excludedUrls}'.split(',')}")
+    //private List<String> excludedUrls;
 
     /**
      * 统一鉴权
      *
      * @param exchange 请求
-     * @param chain 过滤器
+     * @param chain    过滤器
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String url = exchange.getRequest().getURI().getPath();
         log.info( "url:"+ url);
         // 排除特殊不需要校验接口地址
+        List<String> excludedUrls = excludeUrlsConfig.getExcludedUrls();
         if(excludedUrls.contains(url)){
             return chain.filter(exchange);
         }

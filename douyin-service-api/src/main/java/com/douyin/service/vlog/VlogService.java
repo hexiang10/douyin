@@ -81,8 +81,18 @@ public interface VlogService extends IService<Vlog> {
 
     /**
      * 获取视频点赞总数
+     *
      * @param vlogId 视频Id
      */
     public Integer getVlogBeLikedCounts(String vlogId);
+
+    /**
+     * 把counts输入数据库
+     *
+     * @param vlogId 视频Id
+     * @param counts 数量
+     * @param type   刷新类型：0刷新视频点赞数；1刷新视频评论数
+     */
+    public void flushCounts(String vlogId, Integer counts, Integer type);
 
 }

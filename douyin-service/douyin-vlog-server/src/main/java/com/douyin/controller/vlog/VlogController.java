@@ -9,7 +9,10 @@ import com.douyin.service.vlog.MyLikedVlogService;
 import com.douyin.service.vlog.VlogService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +28,8 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/vlog")
 @Slf4j
-@Tag(name = "短视频业务模块",description = "VlogController")
+@RefreshScope
+@Tag(name = "短视频业务模块", description = "VlogController")
 public class VlogController extends BaseProperties<Vlog> {
 
     @Autowired
@@ -34,13 +38,16 @@ public class VlogController extends BaseProperties<Vlog> {
     @Autowired
     MyLikedVlogService myLikedVlogService;
 
+    @Value("${douyin.vlogLikedCounts}")
+    Integer vlogLikedCounts;
+
     /**
      * 新增视频信息
      *
      * @param vlogBo 视频信息
      */
     @PostMapping("/publish")
-    public GraceJSONResult publish(@Valid @RequestBody VlogBo vlogBo){
+    public GraceJSONResult publish(@Valid @RequestBody VlogBo vlogBo) {
         vlogService.createVlog(vlogBo);
         return GraceJSONResult.ok();
     }
@@ -192,14 +199,25 @@ public class VlogController extends BaseProperties<Vlog> {
                                 @RequestParam String vlogId){
 
         // 用户点赞的视频，关联关系保存到数据库
-        myLikedVlogService.userLikeVlog(userId,vlogId);
+        myLikedVlogService.userLikeVlog(userId, vlogId);
 
         // 点赞后，视频和视频发布者的获赞都会+1
-        redis.increment(REDIS_VLOGER_BE_LIKED_COUNTS+":"+vlogerId,1);
-        redis.increment(REDIS_VLOG_BE_LIKED_COUNTS+":"+vlogId,1);
+        redis.increment(REDIS_VLOGER_BE_LIKED_COUNTS + ":" + vlogerId, 1);
+        redis.increment(REDIS_VLOG_BE_LIKED_COUNTS + ":" + vlogId, 1);
 
         // 用户点赞的视频，需要在redis中保存关联关系
-        redis.set(REDIS_USER_LIKE_VLOG+":"+userId+":"+vlogId,"1");
+        redis.set(REDIS_USER_LIKE_VLOG + ":" + userId + ":" + vlogId, "1");
+
+        // 点赞完毕，获得当前redis中的总数
+        // 判断数量是否满足阈值，若超过，则触发入库
+        String countsStr = redis.get(REDIS_VLOG_BE_LIKED_COUNTS + ":" + vlogId);
+        Integer counts = 0;
+        if (StringUtils.isNotBlank(countsStr)) {
+            counts = Integer.valueOf(countsStr);
+            if (counts % vlogLikedCounts == 0 && counts != 0) {
+                vlogService.flushCounts(vlogId, counts, 0);
+            }
+        }
 
         return GraceJSONResult.ok();
     }

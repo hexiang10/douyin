@@ -20,10 +20,12 @@
     <artifactId>douyin-service</artifactId>
 
     <dependencies>
-        <dependency>
+
+    <dependency>
             <groupId>com.douyin</groupId>
             <artifactId>douyin-service-api</artifactId>
         </dependency>
+
     </dependencies>
 
 

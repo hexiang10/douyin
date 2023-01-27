@@ -1,6 +1,6 @@
 server:
-  port: 8080
-
+  port: 8081
+  address: 127.0.0.1
 mybatis-plus:
   mapper-packages: com.dubbo.demo.mapper
   global-config:
@@ -17,13 +17,13 @@ spring:
     name: dubbo-user-service
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://1.12.42.148:3306/douyin_cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${server.address}:3306/douyin-cloud?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
   cloud:
     nacos:
       discovery:
-        server-addr: 1.12.42.148:8848
+        server-addr: ${server.address}:8848
 
 dubbo:
   protocol:
@@ -32,7 +32,9 @@ dubbo:
   scan:
     base-packages: com.dubbo.demo.service
   registry:
-    address: spring-cloud://1.12.42.148
+    address: spring-cloud://${server.address}
+  provider:
+    host: ${server.address}
   consumer:
     check: false
   cloud:
