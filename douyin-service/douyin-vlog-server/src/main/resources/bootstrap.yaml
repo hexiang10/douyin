@@ -1,15 +1,22 @@
+project:
+  ip: 192.168.31.178
+  nacos-namespace: @nacos.namespace@
 server:
   port: 8083
-  address: 192.168.31.178
 spring:
   application:
     name: douyin-vlog-server
+  datasource:
+    username: root
+    password: root
+  redis:
+    password: root
   cloud:
     nacos:
       config:
         group: dev
-        namespace: e2a06f55-6efb-4898-a990-f43c9f455579
-        server-addr: ${server.address}:8848
+        namespace: ${project.nacos-namespace}
+        server-addr: ${project.ip}:8848
         file-extension: yaml
         shared-configs:
           - dataId: common.yaml
@@ -21,7 +28,6 @@ spring:
           - dataId: dubbo.yaml
             group: dev
             refresh: true
-        extension-configs:
           - dataId: redis.yaml
             group: dev
             refresh: true

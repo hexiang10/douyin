@@ -1,25 +1,32 @@
+project:
+  ip: @ipAddress@
+  nacos-namespace: @nacos.namespace@
 server:
   port: 8888
-  address: 192.168.31.178
 spring:
   application:
     name: douyin-gateway
+  redis:
+    password: root
   cloud:
     nacos:
+      username: nacos
+      password: nacos
       config:
         group: dev
-        namespace: e2a06f55-6efb-4898-a990-f43c9f455579
-        server-addr: ${server.address}:8848
+        namespace: ${project.nacos-namespace}
+        server-addr: ${project.ip}:8848
         file-extension: yaml
         shared-configs:
           - dataId: common.yaml
             group: dev
             refresh: true
-        extension-configs:
           - dataId: redis.yaml
             group: dev
             refresh: true
+        extension-configs:
           - dataId: gateway.yaml
             group: dev
             refresh: true
+
 

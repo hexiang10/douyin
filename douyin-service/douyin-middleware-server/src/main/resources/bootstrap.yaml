@@ -1,15 +1,22 @@
+project:
+  ip: @ipAddress@
+  nacos-namespace: @nacos.namespace@
 server:
   port: 8082
-  address: 192.168.31.178
 spring:
   application:
     name: douyin-middleware-server
+  datasource:
+    username: root
+    password: root
+  redis:
+    password: root
   cloud:
     nacos:
       config:
         group: dev
-        namespace: e2a06f55-6efb-4898-a990-f43c9f455579
-        server-addr: ${server.address}:8848
+        namespace: ${project.nacos-namespace}
+        server-addr: ${project.ip}:8848
         file-extension: yaml
         shared-configs:
           - dataId: common.yaml
@@ -21,16 +28,39 @@ spring:
           - dataId: dubbo.yaml
             group: dev
             refresh: true
-        extension-configs:
           - dataId: redis.yaml
             group: dev
             refresh: true
-          - dataId: minio.yaml
-            group: dev
-            refresh:  true
-          - dataId: mongodb.yaml
-            group: dev
-            refresh: true
-          - dataId: rabbitmq.yaml
-            group: dev
-            refresh: true
+
+--- # mongodb开发环境配置
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:root@${project.ip}:27017
+      database: douyin-cloud
+
+--- # rabbitmq开发环境配置
+spring:
+  rabbitmq:
+    host: ${remote.ip}
+    port: 5672
+    username: admin
+    password: admin
+    virtual-host: douyin-cloud
+
+# MinIO 配置
+minio:
+  # MinIO服务地址  dev-step1: ps -ef|grep minio \n kill -9 xxxxx
+  endpoint: http://${project.ip}:9000
+  # 文件地址host   dev-step2: cd /usr/local/minio/ \n ./start-minio.sh
+  fileHost: http://${project.ip}:9000
+  # 存储桶bucket名称
+  bucketName: douyin-cloud
+  # 用户名
+  accessKey: minioadmin
+  # 密码
+  secretKey: minioadmin
+  # 图片大小限制，单位：m
+  imgSize: 1024
+  # 文件大小限制，单位：m
+  fileSize: 1024

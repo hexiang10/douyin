@@ -18,6 +18,8 @@
     </modules>
 
     <properties>
+        <ipAddress>192.168.31.178</ipAddress>
+        <nacos.namespace>e2a06f55-6efb-4898-a990-f43c9f455579</nacos.namespace>
         <project.version>1.0-SNAPSHOT</project.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -28,7 +30,9 @@
         <spring-cloud.version>Hoxton.SR12</spring-cloud.version>
         <spring-cloud-alibaba.version>2.2.7.RELEASE</spring-cloud-alibaba.version>
         <spring-alibaba-context.version>1.0.11</spring-alibaba-context.version>
+        <nacos.version>2.1.0</nacos.version>
         <lombok.version>1.18.24</lombok.version>
+        <mysql.version>8.0.30</mysql.version>
         <druid.version>1.2.12</druid.version>
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <springdoc.version>1.6.12</springdoc.version>
@@ -38,8 +42,6 @@
         <dubbo.version>2.7.8</dubbo.version>
         <jwt.version>0.9.1</jwt.version>
     </properties>
-
-
 
     <!-- 依赖声明 -->
     <dependencyManagement>
@@ -87,6 +89,17 @@
                 <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.alibaba.nacos</groupId>
+                        <artifactId>nacos-client</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>${nacos.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba.spring</groupId>
@@ -100,7 +113,12 @@
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-
+            <!-- MySQL 数据库 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
@@ -186,7 +204,21 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <!--支持yaml读取pom的参数-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <delimiters>
+                        <delimiter>@</delimiter>
+                    </delimiters>
+                    <useDefaultDelimiters>false</useDefaultDelimiters>
+                </configuration>
+            </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

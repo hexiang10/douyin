@@ -3,7 +3,7 @@
 //import com.douyin.common.enums.ResponseStatusEnum;
 //import com.douyin.common.exception.GraceException;
 //import com.douyin.common.properties.BaseProperties;
-//import com.douyin.common.utils.IPUtil;
+//import com.douyin.framework.utils.IPUtil;
 //import lombok.extern.slf4j.Slf4j;
 //import org.springframework.web.servlet.HandlerInterceptor;
 //
