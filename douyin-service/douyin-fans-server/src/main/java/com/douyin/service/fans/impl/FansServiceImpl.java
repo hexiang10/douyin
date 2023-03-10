@@ -9,7 +9,7 @@ import com.douyin.common.results.PagedGridResult;
 import com.douyin.common.utils.RedisUtil;
 import com.douyin.common.utils.idworker.Sid;
 import com.douyin.framework.domain.fans.Fans;
-import com.douyin.framework.domain.fans.vo.FansVO;
+import com.douyin.framework.domain.fans.vo.FansVo;
 import com.douyin.framework.domain.vlog.vo.VlogerVO;
 import com.douyin.framework.utils.IPageUtil;
 import com.douyin.mapper.fans.FansMapper;
@@ -28,8 +28,8 @@ import java.util.Map;
 /**
  * <p>
  * 粉丝表
-
- 服务实现类
+ * <p>
+ * 服务实现类
  * </p>
  *
  * @author hexiang
@@ -68,11 +68,11 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
         fans.setVlogerId(vlogerId);
         // 判断对方是否关注我，如果关注我，那么双方都要互为朋友关系
         Fans vloger = queryFansRelationship(vlogerId, myId);
-        if(vloger != null){
+        if (vloger != null) {
             fans.setIsFanFriendOfMine(YesOrNo.YES.type);
             vloger.setIsFanFriendOfMine(YesOrNo.YES.type);
             fansMapper.updateById(vloger);
-        }else{
+        } else {
             fans.setIsFanFriendOfMine(YesOrNo.NO.type);
         }
 
@@ -89,7 +89,7 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
         //        "sys.msg." + MessageEnum.FOLLOW_YOU.enValue,
         //        JsonUtils.objectToJson(messageMO));
 
-        messageService.sentFollowMessage(myId,vlogerId);
+        messageService.sentFollowMessage(myId, vlogerId);
     }
 
     /**
@@ -102,8 +102,8 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
     @Transactional
     public void doCancel(String myId, String vlogerId) {
         // 判断我们是否是朋友关系，如果是，则需要取消对方的关系
-        Fans fans = queryFansRelationship(myId,vlogerId );
-        if(fans != null && fans.getIsFanFriendOfMine()==YesOrNo.YES.type){
+        Fans fans = queryFansRelationship(myId, vlogerId);
+        if (fans != null && fans.getIsFanFriendOfMine() == YesOrNo.YES.type) {
             // 抹除双方的朋友关系，自己的关系删除即可
             Fans vloger = queryFansRelationship(vlogerId, myId);
             vloger.setIsFanFriendOfMine(YesOrNo.NO.type);
@@ -134,10 +134,10 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
      */
     @Override
     public PagedGridResult queryMyFollows(String myId, Integer page, Integer pageSize) {
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("myId", myId);
         IPage<VlogerVO> vlogerVOIPage = fansMapper.queryMyFollows(PageDTO.of(page, pageSize), paramMap);
-        return IPageUtil.setterPagedGrid(vlogerVOIPage,page);
+        return IPageUtil.setterPagedGrid(vlogerVOIPage, page);
     }
 
     /**
@@ -149,30 +149,30 @@ public class FansServiceImpl extends ServiceImpl<FansMapper, Fans> implements Fa
      */
     @Override
     public PagedGridResult queryMyFans(String myId, Integer page, Integer pageSize) {
-        Map<String,Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("myId", myId);
-        IPage<FansVO> fansVOIPage = fansMapper.queryMyFans(PageDTO.of(page, pageSize), paramMap);
-        List<FansVO> fansVOList = fansVOIPage.getRecords();
+        IPage<FansVo> fansVOIPage = fansMapper.queryMyFans(PageDTO.of(page, pageSize), paramMap);
+        List<FansVo> fansVoList = fansVOIPage.getRecords();
         String relationship;
-        for (FansVO fansVO : fansVOList) {
+        for (FansVo fansVO : fansVoList) {
             relationship = redis.get(REDIS_FANS_AND_VLOGGER_RELATIONSHIP + ":" + myId + ":" + fansVO.getFanId());
-            if(StringUtils.isNotBlank(relationship)&&relationship.equalsIgnoreCase("1")){
+            if (StringUtils.isNotBlank(relationship) && relationship.equalsIgnoreCase("1")) {
                 fansVO.setFriend(true);
             }
         }
-        fansVOIPage.setRecords(fansVOList);
-        return IPageUtil.setterPagedGrid(fansVOIPage,page);
+        fansVOIPage.setRecords(fansVoList);
+        return IPageUtil.setterPagedGrid(fansVOIPage, page);
     }
 
     /**
      * 查询是否为朋友关系
      *
-     * @param fanId 关注者
+     * @param fanId    关注者
      * @param vlogerId 被关注者
      */
-    public Fans queryFansRelationship(String fanId,String vlogerId){
+    public Fans queryFansRelationship(String fanId, String vlogerId) {
         LambdaQueryWrapper<Fans> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Fans::getFanId,fanId).eq(Fans::getVlogerId,vlogerId);
+        wrapper.eq(Fans::getFanId, fanId).eq(Fans::getVlogerId, vlogerId);
         return fansMapper.selectOne(wrapper);
     }
 }

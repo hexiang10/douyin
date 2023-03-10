@@ -1,7 +1,7 @@
 {
-    "name" : "抖音",
-    "appid" : "__UNI__800FF13",
-    "description" : "仿抖音实现的短视频社交平台软件",
+    "name" : "Douyin",
+    "appid" : "__UNI__3250B8F",
+    "description" : "仿抖音APP短视频社交平台软件",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -19,7 +19,8 @@
         "screenOrientation" : [ "portrait-primary" ],
         /* 模块配置 */
         "modules" : {
-            "VideoPlayer" : {}
+            "VideoPlayer" : {},
+            "Camera" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -46,7 +47,8 @@
             },
             /* ios打包配置 */
             "ios" : {
-                "idfa" : false
+                "idfa" : false,
+                "dSYMs" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {

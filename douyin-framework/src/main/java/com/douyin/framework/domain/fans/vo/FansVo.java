@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class FansVO implements Serializable {
+public class FansVo implements Serializable {
     private String fanId;
     private String nickname;
     private String face;
