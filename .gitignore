@@ -45,6 +45,4 @@ nbdist/
 !*/build/*.html
 !*/build/*.xml
 
-doc/*
-douyin-admin/*
-script/*
+
