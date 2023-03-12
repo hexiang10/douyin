@@ -42,7 +42,7 @@ spring:
 --- # rabbitmq开发环境配置
 spring:
   rabbitmq:
-    host: ${remote.ip}
+    host: ${project.ip}
     port: 5672
     username: admin
     password: admin
