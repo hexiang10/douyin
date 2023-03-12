@@ -7,12 +7,14 @@ spring:
   application:
     name: douyin-fans-server
   datasource:
-    username: root
-    password: root
+    username: @mysql.username@
+    password: @mysql.password@
   redis:
-    password: root
+    password: @redis.password@
   cloud:
     nacos:
+      username: @nacos.username@
+      password: @nacos.password@
       config:
         group: dev
         namespace: ${project.nacos-namespace}

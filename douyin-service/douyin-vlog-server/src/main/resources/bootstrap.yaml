@@ -1,5 +1,5 @@
 project:
-  ip: 192.168.31.178
+  ip: @ipAddress@
   nacos-namespace: @nacos.namespace@
 server:
   port: 8083
@@ -7,12 +7,14 @@ spring:
   application:
     name: douyin-vlog-server
   datasource:
-    username: root
-    password: root
+    username: @mysql.username@
+    password: @mysql.password@
   redis:
-    password: root
+    password: @redis.password@
   cloud:
     nacos:
+      username: @nacos.username@
+      password: @nacos.password@
       config:
         group: dev
         namespace: ${project.nacos-namespace}

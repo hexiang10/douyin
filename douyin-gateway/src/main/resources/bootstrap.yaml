@@ -7,11 +7,11 @@ spring:
   application:
     name: douyin-gateway
   redis:
-    password: root
+    password: @redis.password@
   cloud:
     nacos:
-      username: nacos
-      password: nacos
+      username: @nacos.username@
+      password: @nacos.password@
       config:
         group: dev
         namespace: ${project.nacos-namespace}

@@ -49,7 +49,9 @@ public class PassportController extends BaseProperties {
             // 根据用户ip进行限制，限制用户在60秒之内只能获得一次验证码
             redis.setnx60s(MOBILE_SMSCODE+":"+userIp,userIp);
             // 随机生成6位验证码数字
-            String smsCode = String.valueOf((int)((Math.random() * 9 + 1) * 100000));
+            //String smsCode = String.valueOf((int)((Math.random() * 9 + 1) * 100000));
+            // 测试
+            String smsCode = "985211";
             // 发送验证码 —— prod环境下短信功能已开放使用
             //smsUtil.sendSMS(mobile, smsCode);
             // 测试或者发送失败,可查看控制台日志获取验证码

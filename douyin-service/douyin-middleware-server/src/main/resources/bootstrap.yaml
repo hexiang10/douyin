@@ -7,12 +7,14 @@ spring:
   application:
     name: douyin-middleware-server
   datasource:
-    username: root
-    password: root
+    username: @mysql.username@
+    password: @mysql.password@
   redis:
-    password: root
+    password: @redis.password@
   cloud:
     nacos:
+      username: @nacos.username@
+      password: @nacos.password@
       config:
         group: dev
         namespace: ${project.nacos-namespace}
@@ -36,16 +38,16 @@ spring:
 spring:
   data:
     mongodb:
-      uri: mongodb://root:root@${project.ip}:27017
+      uri: mongodb://root:hexiang@${project.ip}:27017
       database: douyin-cloud
 
 --- # rabbitmq开发环境配置
 spring:
   rabbitmq:
-    host: ${remote.ip}
+    host: ${project.ip}
     port: 5672
     username: admin
-    password: admin
+    password: hexiang
     virtual-host: douyin-cloud
 
 # MinIO 配置
@@ -59,7 +61,7 @@ minio:
   # 用户名
   accessKey: minioadmin
   # 密码
-  secretKey: minioadmin
+  secretKey: miniohexiang
   # 图片大小限制，单位：m
   imgSize: 1024
   # 文件大小限制，单位：m
