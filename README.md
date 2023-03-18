@@ -75,7 +75,4 @@
 
 ## 支持一下
 
-| ![](https://gitcode.net/HXBest/storage/-/raw/images/qr_code/vx-pay.jpg) | ![](https://gitcode.net/HXBest/storage/-/raw/images/qr_code/zfb-pay.jpg) |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                             微信                             |                            支付宝                            |
-
+![](https://gitcode.net/HXBest/storage/-/raw/images/qr_code/vx-pay.jpg)
