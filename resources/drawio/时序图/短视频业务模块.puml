@@ -1,0 +1,12 @@
+@startuml sequence-diagram
+'https: //plantuml.com/sequence-diagram
+
+Actor -> VlogController: 1.1 获取请求视频列表
+VlogController -> VlogService: 1.2 查询视频列表
+VlogService -> FansService: 1.3 查询是否关注了展示视频的博主
+FansServic --> VlogService: 1.4 返回结果
+VlogService -> RedisUtil: 1.5 查询当前视频点赞数、关注数、浏览用户是否点赞
+VlogService <-- RedisUtil: 1.6 返回数据
+VlogService --> VlogController: 1.7 返回数据
+VlogController --> Actor: 1.8 返回视频列表信息
+@enduml
