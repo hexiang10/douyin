@@ -1,5 +1,9 @@
 ######################################################################
 # Build Tools
+.git
+resource/*
+images/*
+docs/*
 
 .gradle
 /build/
@@ -46,3 +50,4 @@ nbdist/
 !*/build/*.xml
 
 
+docs/
